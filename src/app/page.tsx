@@ -3,6 +3,8 @@ import { env } from "~/env";
 import { type ApiFlight } from "~/server/api/routers/post";
 import { api } from "~/trpc/server";
 
+export const revalidate = 180;
+
 export default async function Home() {
   const flights = await getData();
 
