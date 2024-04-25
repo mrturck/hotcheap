@@ -127,7 +127,7 @@ def get_airport_weathers_dict(flights):
             airport_weathers[flight["destination"]] = get_weather(flight)
     return airport_weathers
 
-@app.route('/flights', methods=['GET'])
+@app.route('/api/flights', methods=['GET'])
 def get_flights():
     # query params
     pwd = request.args.get('pwd', 'password')

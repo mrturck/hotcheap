@@ -32,7 +32,7 @@ async function getData() {
   } else {
     console.log("calling the server");
     const res = await fetch(
-      env.DATASERVER_URL + "/flights?pwd=" + env.DATASERVER_PWD,
+      env.DATASERVER_URL + "/api/flights?pwd=" + env.DATASERVER_PWD,
       {
         next: { revalidate: 180 },
       },
