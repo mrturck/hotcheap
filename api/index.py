@@ -53,7 +53,7 @@ app = Flask(__name__)
 
 api = Ryanair(currency="GBP")
 
-eu_airports = pd.read_csv('eu_airports.csv')
+eu_airports = pd.read_csv(os.path.join(os.path.dirname(__file__), 'eu_airports.csv'))
 
 # {'id': 4340,
 # 'ident': 'LIMC',
