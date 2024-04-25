@@ -5,6 +5,8 @@ import { useState } from "react";
 
 import { api } from "~/trpc/react";
 
+import { type FlightDestination } from "~/server/api/routers/post";
+
 export function Flights() {
   const router = useRouter();
   const [name, setName] = useState("");
@@ -36,20 +38,31 @@ export function Flights() {
       // }}
       className="flex flex-col gap-2"
     >
-      {/* <input
-        type="text"
-        placeholder="Title"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        className="w-full rounded-full px-4 py-2 text-black"
-      />
-      <button
-        type="submit"
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold transition hover:bg-white/20"
-        disabled={createPost.isPending}
-      >
-        {createPost.isPending ? "Submitting..." : "Submit"}
-      </button> */}
+      {result.data?.map((destination) => (
+        <FlightDestination
+          key={destination.destination}
+          destination={destination}
+        />
+      ))}
     </div>
   );
 }
+
+const FlightDestination: React.FC<{ destination: FlightDestination }> = ({
+  destination,
+}) => {
+  return (
+    <div className="border border-red-500 p-3">
+      <h2 className="text-xl">destination: {destination.destination}</h2>
+      <br />
+      departureDate: {destination.departureDate}
+      <br />
+      price.total: {destination.price.total}
+      <br />
+      origin: {destination.origin}
+      <br />
+      type: {destination.type}
+      <br />
+    </div>
+  );
+};
