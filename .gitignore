@@ -41,4 +41,4 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 
-server/myenv
+api/myenv
