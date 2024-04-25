@@ -13,6 +13,13 @@ export function Flights() {
     refetchOnWindowFocus: false,
   });
 
+  const weather = api.post.getWeather.useQuery({
+    lat: 52.3679,
+    lon: 4.9035,
+  }, {
+    refetchOnWindowFocus: false
+  });
+  console.log(weather.data)
   // const createPost = api.post.create.useMutation({
   //   onSuccess: () => {
   //     router.refresh();

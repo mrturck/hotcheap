@@ -26,6 +26,7 @@ export const env = createEnv({
     DISCORD_CLIENT_SECRET: z.string().optional(),
     AMADEUS_CLIENT_ID: z.string(),
     AMADEUS_CLIENT_SECRET: z.string(),
+    OPENWEATHER_KEY: z.string(),
   },
 
   /**
@@ -50,6 +51,7 @@ export const env = createEnv({
     DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
     AMADEUS_CLIENT_ID: process.env.AMADEUS_CLIENT_ID,
     AMADEUS_CLIENT_SECRET: process.env.AMADEUS_CLIENT_SECRET,
+    OPENWEATHER_KEY: process.env.OPENWEATHER_KEY
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

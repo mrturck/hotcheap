@@ -13,6 +13,7 @@ import {
   publicProcedure,
 } from "~/server/api/trpc";
 import { env } from "~/env";
+import OpenWeatherAPI from "openweather-api-node";
 
 export const postRouter = createTRPCRouter({
   // hello: publicProcedure
@@ -47,6 +48,20 @@ export const postRouter = createTRPCRouter({
   // getSecretMessage: protectedProcedure.query(() => {
   //   return "you can now see this secret message!";
   // }),
+  getWeather: publicProcedure.input(
+      z.object({
+        lat: z.number(),
+        lon: z.number(),
+      })
+  ).query(async ({ input, ctx }) => {
+    const weather = new OpenWeatherAPI({
+      key: env.OPENWEATHER_KEY,
+      coordinates: input,
+      units: "metric"
+    })
+
+    return await weather.getCurrent()
+  }),
 
   getHotAndCheap: publicProcedure.query(async ({ ctx }) => {
     const tomorrow = new Date();
