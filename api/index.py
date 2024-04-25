@@ -157,18 +157,19 @@ def get_flights():
         else:
             flight["max_temp"] = None
             flight["day_of_max_temp"] = None
-            # flight["forecast"] = weather[2]
 
-    for flight in flights_data:
+    flights_greater_than_20_temp = [flight for flight in flights_data if flight["max_temp"] is not None and flight["max_temp"] > 20]
+
+    for flight in flights_greater_than_20_temp:
         if flight["max_temp"] is not None:
             score = flight["max_temp"] / flight["price"]
             flight["score"] = score
         else:
             flight["score"] = 0
 
-    flights_data.sort(key=lambda x: x["score"], reverse=True)
+    flights_greater_than_20_temp.sort(key=lambda x: x["score"], reverse=True)
 
-    return jsonify(flights_data)
+    return jsonify(flights_greater_than_20_temp)
 
 
 if __name__ == '__main__':
