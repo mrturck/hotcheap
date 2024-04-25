@@ -10,8 +10,8 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "Cheap n Hot",
-  description: "Created by @rorhug",
+  title: "Hot'n'Cheap",
+  description: "Created by @rorhug & @_oscarking_",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
