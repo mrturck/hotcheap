@@ -22,6 +22,10 @@ export default async function Home() {
 }
 
 async function getData() {
+  if (process.env.CI) {
+    return [];
+  }
+
   if (process.env.NODE_ENV === "development") {
     const res = await api.post.getHotAndCheap();
     return res;
