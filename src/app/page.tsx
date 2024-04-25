@@ -1,6 +1,6 @@
 import { Flights } from "~/app/_components/flights";
 import { env } from "~/env";
-import { ApiFlight } from "~/server/api/routers/post";
+import { type ApiFlight } from "~/server/api/routers/post";
 import { api } from "~/trpc/server";
 
 export default async function Home() {

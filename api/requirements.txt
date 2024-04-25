@@ -1,0 +1,6 @@
+ryanair-py @ git+https://github.com/SorakaMafaka/ryanair-py@d87b728580a10584101a0592dfb329dc56fe6c33
+flask===3.0.3
+pandas===2.2.2
+pyowm===3.3.0
+python-dotenv===1.0.1
+gunicorn===22.0.0
