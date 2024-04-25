@@ -14,40 +14,24 @@ import {
 } from "~/server/api/trpc";
 import { env } from "~/env";
 
+export type FlightDestination = {
+  type: "flight-destination";
+  origin: string;
+  destination: string;
+  departureDate: string;
+  price: {
+    total: string;
+  };
+  links: {
+    flightDates: string;
+    flightOffers: string;
+  };
+  weather: {
+    temperature: number;
+  };
+};
+
 export const postRouter = createTRPCRouter({
-  // hello: publicProcedure
-  //   .input(z.object({ text: z.string() }))
-  //   .query(({ input }) => {
-  //     return {
-  //       greeting: `Hello ${input.text}`,
-  //     };
-  //   }),
-
-  // create: protectedProcedure
-  //   .input(z.object({ name: z.string().min(1) }))
-  //   .mutation(async ({ ctx, input }) => {
-  //     // simulate a slow db call
-  //     await new Promise((resolve) => setTimeout(resolve, 1000));
-
-  //     return ctx.db.post.create({
-  //       data: {
-  //         name: input.name,
-  //         createdBy: { connect: { id: ctx.session.user.id } },
-  //       },
-  //     });
-  //   }),
-
-  // getLatest: protectedProcedure.query(({ ctx }) => {
-  //   return ctx.db.post.findFirst({
-  //     orderBy: { createdAt: "desc" },
-  //     where: { createdBy: { id: ctx.session.user.id } },
-  //   });
-  // }),
-
-  // getSecretMessage: protectedProcedure.query(() => {
-  //   return "you can now see this secret message!";
-  // }),
-
   getHotAndCheap: publicProcedure.query(async ({ ctx }) => {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -61,20 +45,22 @@ export const postRouter = createTRPCRouter({
     });
 
     try {
-      // const result = await amadeus.shopping.flightOffersSearch.get({
-      //   originLocationCode: "LHR",
-      //   destinationLocationCode: "DUB",
-      //   departureDate: tomorrow.toISOString().split("T")[0],
-      //   adults: "1",
-      //   nonStop: true,
-      //   currencyCode: "GBP",
-      //   // maxPrice: 100,
-      // });
+      // const result = await amadeus.shopping.flightOffersSearch.post(
+      //   JSON.stringify({
+      //     originLocationCode: "LHR",
+      //     destinationLocationCode: "AMS",
+      //     departureDate: tomorrow.toISOString().split("T")[0],
+      //     adults: "1",
+      //     // nonStop: true,
+      //     // currencyCode: "GBP",
+      //     // maxPrice: 100,
+      //   }),
+      // );
       const result = await amadeus.shopping.flightDestinations.get({
         origin: "LON",
         departureDate:
-          today.toISOString().split("T")[0] +
-          "," +
+          // today.toISOString().split("T")[0] +
+          // "," +
           tomorrow.toISOString().split("T")[0],
         // adults: "1",
         nonStop: true,
@@ -83,17 +69,11 @@ export const postRouter = createTRPCRouter({
         oneWay: true,
         // max: 100,
       });
-      return result as { a: string };
+      return result.data as FlightDestination[];
     } catch (error) {
       console.log(error);
       return [];
     }
-    // .then(function (response) {
-    //   console.log(response.data);
-    // })
-    // .catch(function (responseError) {
-    //   console.log(responseError.code);
-    // });
     console.log("fetch amadeus");
   }),
 });
