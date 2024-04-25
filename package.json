@@ -20,6 +20,7 @@
     "@trpc/client": "next",
     "@trpc/react-query": "next",
     "@trpc/server": "next",
+    "dayjs": "^1.11.10",
     "next": "^14.2.1",
     "next-auth": "^4.24.6",
     "openweather-api-node": "^3.1.2",

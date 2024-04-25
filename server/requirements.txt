@@ -1,0 +1,5 @@
+ryanair-py===3.0.0
+flask===3.0.3
+pandas===2.2.2
+pyowm===3.3.0
+python-dotenv===1.0.1

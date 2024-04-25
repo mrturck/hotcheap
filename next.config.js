@@ -5,6 +5,15 @@
 await import("./src/env.js");
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+  async rewrites() {
+    return [
+      {
+        source: '/dataserver/:path*',
+        destination: 'http://127.0.0.1:5000/:path*', // Proxy to Backend
+      },
+    ]
+  },
+};
 
 export default config;

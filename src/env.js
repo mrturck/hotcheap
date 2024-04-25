@@ -25,6 +25,8 @@ export const env = createEnv({
     DISCORD_CLIENT_ID: z.string().optional(),
     DISCORD_CLIENT_SECRET: z.string().optional(),
     OPENWEATHER_KEY: z.string().optional(),
+    DATASERVER_URL: z.string().url().default("http://127.0.0.1:5000"),
+    DATASERVER_PWD: z.string().default("password"),
   },
 
   /**
@@ -47,7 +49,9 @@ export const env = createEnv({
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
     DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
-    OPENWEATHER_KEY: process.env.OPENWEATHER_KEY
+    OPENWEATHER_KEY: process.env.OPENWEATHER_KEY,
+    DATASERVER_URL: process.env.DATASERVER_URL,
+    DATASERVER_PWD: process.env.DATASERVER_PWD,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
