@@ -14,7 +14,7 @@ export default async function Home() {
         <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
           Hot<span className="text-[hsl(0,100%,70%)]">&apos;n&apos;</span>Cheap
         </h1>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
+        <div className="min-w-full md:min-w-[700px] md:gap-8">
           {/* <pre className="text-[8px]"></pre> */}
           <Flights flights={flights} />
         </div>

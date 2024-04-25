@@ -110,7 +110,7 @@ const GetFlightLink: React.FC<{ flight: ApiFlight }> = ({ flight: flight }) => {
       target="_blank"
     >
       <div className="border bg-green-800 py-3 text-center">
-        Get It for {flight.price} {flight.currency}
+        <strong>Buy Now</strong> for {flight.price} {flight.currency}
       </div>
     </a>
   );
