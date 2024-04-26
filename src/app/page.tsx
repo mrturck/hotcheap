@@ -14,10 +14,19 @@ export default async function Home() {
         <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
           Hot<span className="text-[hsl(0,100%,70%)]">&apos;n&apos;</span>Cheap
         </h1>
-        <p>Ryanair flights ranked by Summer Magic™️ (temp/price)</p>
-        <p>
+        <p className="text-center">
+          Ryanair flights ranked by Summer Magic™️ (temp/price)
+        </p>
+        <p className="text-center">
           More features coming soon including weather forecast, date selection
-          and origins other than Stansted.
+          and origins other than Stansted. <br />
+          <a
+            className="font-semibold"
+            target="_blank"
+            href="https://docs.google.com/forms/d/e/1FAIpQLSfl_axOPN5Fil8s2CQ2tw9-AM9lNkLMq-CNjXGmlz9DcKvJFg/viewform?usp=sf_link"
+          >
+            Tell us or ask us anything ↗️
+          </a>
         </p>
         <div className="text-center">
           Made by{" "}
