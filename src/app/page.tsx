@@ -14,6 +14,39 @@ export default async function Home() {
         <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
           Hot<span className="text-[hsl(0,100%,70%)]">&apos;n&apos;</span>Cheap
         </h1>
+        <p>Ryanair flights ranked by Summer Magic™️ (temp/price)</p>
+        <p>
+          More features coming soon including weather forecast, date selection
+          and origins other than Stansted.
+        </p>
+        <div className="text-center">
+          Made by{" "}
+          <a
+            className="font-semibold"
+            target="_blank"
+            href="https://twitter.com/_oscarking_"
+          >
+            @_oscarking_
+          </a>{" "}
+          and{" "}
+          <a
+            className="font-semibold"
+            target="_blank"
+            href="https://twitter.com/rorhug"
+          >
+            @rorhug
+          </a>
+          .{" "}
+          <a
+            className="font-semibold"
+            target="_blank"
+            href="https://github.com/rorhug/hotcheap"
+          >
+            Open Source ↗️
+          </a>
+        </div>
+        <div></div>
+
         <div className="min-w-full md:min-w-[700px] md:gap-8">
           {/* <pre className="text-[8px]"></pre> */}
           <Flights flights={flights} />
