@@ -1,12 +1,15 @@
-import { Flights } from "~/app/_components/flights";
-import { env } from "~/env";
-import { type ApiFlight } from "~/server/api/routers/post";
-import { api } from "~/trpc/server";
+import {Flights} from "~/app/_components/flights";
+import {env} from "~/env";
+import {type ApiFlight} from "~/server/api/routers/post";
+import {api} from "~/trpc/server";
+import {headers} from "next/headers";
 
 export const revalidate = 180;
 
 export default async function Home() {
   const flights = await getData();
+  const headersList = headers()
+  const city = headersList.get('X-Vercel-IP-City')
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#c58055] to-[#300011] text-white">
@@ -25,7 +28,7 @@ export default async function Home() {
             target="_blank"
             href="https://docs.google.com/forms/d/e/1FAIpQLSfl_axOPN5Fil8s2CQ2tw9-AM9lNkLMq-CNjXGmlz9DcKvJFg/viewform?usp=sf_link"
           >
-            Tell us or ask us anything ↗️
+            Tell us or ask us anything ↗️{city}
           </a>
         </p>
         <div className="text-center">
@@ -66,13 +69,14 @@ export default async function Home() {
 }
 
 async function getData() {
+
+
   if (process.env.CI) {
     return [];
   }
 
   if (process.env.NODE_ENV === "development") {
-    const res = await api.post.getHotAndCheap();
-    return res;
+    return await api.post.getHotAndCheap();
   } else {
     console.log("calling the server");
     const res = await fetch(
