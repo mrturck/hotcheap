@@ -7,27 +7,28 @@ import {
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
-} from "~/server/api/trpc";
-import { env } from "~/env";
-import OpenWeatherAPI from "openweather-api-node";
-import { z } from "zod";
+} from "~/server/api/trpc"
+import { env } from "~/env"
+import OpenWeatherAPI from "openweather-api-node"
+import { z } from "zod"
+import { getRankedFlights } from "~/server/rank"
 
 export type FlightDestination = {
-  type: "flight-destination";
-  origin: string;
-  destination: string;
-  departureDate: string;
+  type: "flight-destination"
+  origin: string
+  destination: string
+  departureDate: string
   price: {
-    total: string;
-  };
+    total: string
+  }
   links: {
-    flightDates: string;
-    flightOffers: string;
-  };
+    flightDates: string
+    flightOffers: string
+  }
   weather: {
-    temperature: number;
-  };
-};
+    temperature: number
+  }
+}
 
 export const postRouter = createTRPCRouter({
   getWeather: publicProcedure
@@ -42,41 +43,44 @@ export const postRouter = createTRPCRouter({
         key: env.OPENWEATHER_KEY,
         coordinates: input,
         units: "metric",
-      });
+      })
 
-      return await weather.getCurrent();
+      return await weather.getCurrent()
     }),
 
   getHotAndCheap: publicProcedure.query(async ({ ctx }) => {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
+    // const tomorrow = new Date()
+    // tomorrow.setDate(tomorrow.getDate() + 1)
 
-    const today = new Date();
+    // const today = new Date()
 
     try {
-      return exampleResponse;
+      // if (true)
+      // return exampleResponse
+      const rankedFlights = await getRankedFlights()
+      return rankedFlights
     } catch (error) {
-      console.log(error);
-      return [];
+      console.log(error)
+      return []
     }
   }),
-});
+})
 
-export type ApiFlight = {
-  currency: string;
-  day_of_max_temp: string;
-  departureTime: string;
-  destination: string;
-  destinationFull: string;
-  flightNumber: string;
-  max_temp: number;
-  origin: string;
-  originFull: string;
-  price: number;
-  score: number;
-};
+export type RankedFlight = {
+  currency: string
+  day_of_max_temp: string
+  departureTime: string
+  destination: string
+  destinationFull: string
+  flightNumber: string
+  max_temp: number
+  origin: string
+  originFull: string
+  price: number
+  score: number
+}
 
-export const exampleResponse: ApiFlight[] = [
+export const exampleResponse: RankedFlight[] = [
   {
     currency: "GBP",
     day_of_max_temp: "2024-04-29 12:00:00+00:00",
@@ -207,4 +211,4 @@ export const exampleResponse: ApiFlight[] = [
     price: 12.99,
     score: 0.8791377983063895,
   },
-];
+]

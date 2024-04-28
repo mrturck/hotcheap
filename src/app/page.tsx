@@ -1,12 +1,10 @@
-import {Flights} from "~/app/_components/flights";
-import {env} from "~/env";
-import {type ApiFlight} from "~/server/api/routers/post";
-import {api} from "~/trpc/server";
+import { Flights } from "~/app/_components/flights"
+import { api } from "~/trpc/server"
 
-export const revalidate = 180;
+export const revalidate = 180
 
 export default async function Home() {
-  const flights = await getData();
+  const flights = await getData()
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#c58055] to-[#300011] text-white">
@@ -62,34 +60,13 @@ export default async function Home() {
         </div>
       </div>
     </main>
-  );
+  )
 }
 
 async function getData() {
+  // if (process.env.CI) {
+  //   return []
+  // }
 
-
-  if (process.env.CI) {
-    return [];
-  }
-
-  if (process.env.NODE_ENV === "development") {
-    return await api.post.getHotAndCheap();
-  } else {
-    console.log("calling the server");
-    const res = await fetch(
-      env.DATASERVER_URL + "/api/flights?pwd=" + env.DATASERVER_PWD,
-      {
-        next: { revalidate: 180 },
-      },
-    );
-    // The return value is *not* serialized
-    // You can return Date, Map, Set, etc.
-
-    if (!res) {
-      // This will activate the closest `error.js` Error Boundary
-      throw new Error("Failed to fetch data");
-    }
-
-    return (await res.json()) as ApiFlight[];
-  }
+  return await api.post.getHotAndCheap()
 }

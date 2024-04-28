@@ -1,7 +1,0 @@
-ryanair-py===3.0.0
-flask===3.0.3
-pandas===2.2.2
-pyowm===3.3.0
-python-dotenv===1.0.1
-gunicorn===22.0.0
-setuptools===69.5.1
