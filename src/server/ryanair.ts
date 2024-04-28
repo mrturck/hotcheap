@@ -111,11 +111,13 @@ const getCheapestFlights = async (params: {
   departureTimeTo?: Date | string
   maxPrice?: number
   destinationAirport?: string
+  limit?: number
+  offset?: number
 }): Promise<Flight[]> => {
   const queryUrl = `${BASE_SERVICES_API_URL}oneWayFares`
   const queryParams = new URLSearchParams({
-    // limit: "50",
-    offset: "0",
+    ...(params.limit && { limit: params.limit.toString() }),
+    ...(params.offset && { offset: params.offset.toString() }),
     // priceValueTo: "4",
     market: "en-gb",
     language: "en",

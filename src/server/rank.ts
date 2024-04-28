@@ -18,19 +18,21 @@ export const getRankedFlights = async () => {
   const threeDays = new Date(twoDays)
   threeDays.setDate(threeDays.getDate() + 1)
 
-  const allFlightsData = await getCheapestFlights({
+  const flightsData = await getCheapestFlights({
     airport,
     dateFrom: twoDays,
     dateTo: threeDays,
+    maxPrice: 60,
+    limit: process.env.NODE_ENV === "development" ? 5 : undefined,
   })
-  console.log("got ", allFlightsData.length, "flights")
-  const flightsData = allFlightsData.slice(0, 50)
+  console.log("got ", flightsData.length, "flights")
+  // const flightsData = allFlightsData.slice(0, 50)
 
   const airports = new Set(flightsData.map((flight) => flight.destination))
 
+  console.log("Trying to fetch weather for airports", airports.size)
   const airportWeathers = await getAirportWeatherMap(airports)
   console.log("got ", Object.keys(airportWeathers).length, "airport weathers")
-  // console.log(airportWeathers)
 
   const scoredFlights: RankedFlight[] = flightsData.flatMap((flight) => {
     const weather = airportWeathers[flight.destination]

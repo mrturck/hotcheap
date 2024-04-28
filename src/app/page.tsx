@@ -1,3 +1,4 @@
+import { cache } from "react"
 import { Flights } from "~/app/_components/flights"
 import { api } from "~/trpc/server"
 
@@ -63,10 +64,10 @@ export default async function Home() {
   )
 }
 
-async function getData() {
+const getData = cache(async () => {
   // if (process.env.CI) {
   //   return []
   // }
 
   return await api.post.getHotAndCheap()
-}
+})
