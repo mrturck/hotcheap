@@ -1,3 +1,4 @@
+import { cache } from "react"
 import { type Flight, getCheapestFlights, ryanairAirports } from "./ryanair"
 import { type AirportWeather, getThreeHourlyForecastFiveDays } from "./weather"
 
@@ -6,7 +7,7 @@ export type RankedFlight = Flight &
     score: number
   }
 
-export const getRankedFlights = async () => {
+export const getRankedFlights = cache(async () => {
   // const dateStr = req.query.date || new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0];
   const airport = "STN"
   const today = new Date()
@@ -56,7 +57,7 @@ export const getRankedFlights = async () => {
   flightsGreaterThan20Temp.sort((a, b) => b.score - a.score)
 
   return flightsGreaterThan20Temp
-}
+})
 
 async function getAirportWeatherMap(airports: Set<string>) {
   const airportWeathers = {} as Record<string, AirportWeather>

@@ -1,11 +1,10 @@
-import { cache } from "react"
 import { Flights } from "~/app/_components/flights"
-import { api } from "~/trpc/server"
+import { getRankedFlights } from "~/server/rank"
 
 export const revalidate = 180
 
 export default async function Home() {
-  const flights = await getData()
+  const flights = await getRankedFlights()
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#c58055] to-[#300011] text-white">
@@ -63,11 +62,3 @@ export default async function Home() {
     </main>
   )
 }
-
-const getData = cache(async () => {
-  // if (process.env.CI) {
-  //   return []
-  // }
-
-  return await api.post.getHotAndCheap()
-})
