@@ -1,12 +1,8 @@
-"use client"
-
 import dayjs from "dayjs"
 import { type FlightDestination } from "~/server/api/routers/post"
 import { type RankedFlight } from "~/server/rank"
 
 export function Flights({ flights }: { flights: RankedFlight[] }) {
-  // console.log(flights)
-
   return (
     <div className="flex flex-col gap-2">
       {flights?.map((flight) => (
