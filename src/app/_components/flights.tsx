@@ -140,6 +140,7 @@ export function Flights({
 }
 
 const FlightDestination: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
+  console.log(flight.indexOfMaxTemp)
   return (
     <div className="border border-red-500 p-3">
       <h2 className="text-xl">
@@ -148,9 +149,11 @@ const FlightDestination: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
       <small>that temp {dayjs(flight.dayOfMaxTemp).format("dddd MMM D")}</small>
       <br />
       <div className="flex justify-center gap-2">
-        {flight.forecast.slice(0, 5).map((weather, index) => (
-          <WeatherItem key={index} weather={weather} />
-        ))}
+        {flight.forecast
+          .slice(flight.indexOfMaxTemp, flight.indexOfMaxTemp! + 5)
+          .map((weather, index) => (
+            <WeatherItem key={index} weather={weather} />
+          ))}
       </div>
       Departing {flight.origin} at{" "}
       {dayjs(flight.departureTime).format("HH:mm dddd MMM D")}
@@ -166,6 +169,9 @@ const FlightDestination: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
 const WeatherItem: React.FC<{ weather: WeatherData }> = ({ weather }) => {
   return (
     <div className="pb-4">
+      <p>
+        {weather.time.getDate()}/{weather.time.getMonth() + 1}
+      </p>
       <img src={weather.icon} alt="weather icon" />
       <p>{Math.round(weather.temp * 10) / 10}&deg;C</p>
     </div>

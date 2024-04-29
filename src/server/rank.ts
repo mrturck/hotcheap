@@ -44,12 +44,13 @@ export const getRankedFlights = cache(async (airport: string, date: Date) => {
   const scoredFlights: WeatherFlight[] = flightsData.flatMap((flight) => {
     const weather = airportWeathers[flight.destination]
     if (!weather) return []
-    const { maxTemp, dayOfMaxTemp, forecast } = weather
+    const { maxTemp, dayOfMaxTemp, forecast, indexOfMaxTemp } = weather
     return [
       {
         ...flight,
         maxTemp,
         dayOfMaxTemp,
+        indexOfMaxTemp,
         // score: maxTemp / flight.price,
         forecast,
       },

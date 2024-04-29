@@ -85,6 +85,7 @@ export type WeatherData = {
 export type AirportWeather = {
   maxTemp: number
   dayOfMaxTemp: Date
+  indexOfMaxTemp?: number
   forecast: WeatherData[]
 }
 
@@ -113,18 +114,23 @@ export async function getDailyForecast(
       description: weather[0]?.description ?? "",
       temp: temp.day,
       realFeel: feels_like.day,
-      icon: weather[0]?.icon ?? "",
+      icon: `https://openweathermap.org/img/w/${weather[0]?.icon ?? ""}.png`,
       pop: part.pop,
     }
   })
 
-  const maxForecast = forecast.reduce((acc, curr) =>
-    curr.temp > acc.temp ? curr : acc,
-  )
+  const maxForecast = forecast
+    .slice(0, 5)
+    .reduce((acc, curr) => (curr.temp > acc.temp ? curr : acc))
+
+  const index = forecast
+    .slice(0, 5)
+    .findIndex((item) => item.temp === maxForecast.temp)
 
   return {
     maxTemp: maxForecast.temp,
     dayOfMaxTemp: maxForecast.time,
+    indexOfMaxTemp: index,
     forecast,
   }
 }
