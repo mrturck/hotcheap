@@ -19,8 +19,9 @@ export const getRankedFlights = cache(async (airport: string, date: Date) => {
   // const threeDays = new Date(twoDays)
   // threeDays.setDate(threeDays.getDate() + 1)
 
+  date.setHours(0, 0, 0, 0)
   const dateFrom = new Date(date)
-  dateFrom.setHours(0, 0, 0, 0)
+  dateFrom.setDate(dateFrom.getDate() + 1)
 
   const dateTo = new Date(dateFrom)
   dateTo.setDate(dateTo.getDate() + 1)
