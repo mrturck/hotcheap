@@ -57,8 +57,8 @@ export const postRouter = createTRPCRouter({
     try {
       // if (true)
       // return exampleResponse
-      const rankedFlights = await getRankedFlights()
-      return rankedFlights
+      // const rankedFlights = await getRankedFlights()
+      return []
     } catch (error) {
       console.log(error)
       return []
