@@ -2,7 +2,7 @@
 
 import dayjs from "dayjs"
 import { useMemo, useState } from "react"
-import { WeatherFlight, type RankedFlight } from "~/server/rank"
+import type { WeatherFlight, RankedFlight } from "~/server/rank"
 
 export function Flights({ flights }: { flights: WeatherFlight[] }) {
   const [volume, setVolume] = useState(0.5)
@@ -56,6 +56,30 @@ export function Flights({ flights }: { flights: WeatherFlight[] }) {
     return [above, below] as [RankedFlight[], RankedFlight[]]
   }, [rankedFlights])
 
+  function randomFlights(): void {
+    const randomFlight =
+      rankedFlights[Math.floor(Math.random() * rankedFlights.length)]
+    const urlParams = {
+      adults: "1",
+      teens: "0",
+      children: "0",
+      infants: "0",
+      dateOut: randomFlight!.departureTime.toISOString().slice(0, 10),
+      dateIn: "",
+      isConnectedFlight: "false",
+      discount: "0",
+      promoCode: "",
+      isReturn: "false",
+      originIata: randomFlight!.origin,
+      destinationIata: randomFlight!.destination,
+    }
+
+    window.open(
+      `https://www.ryanair.com/gb/en/trip/flights/select?${new URLSearchParams(urlParams).toString()}`,
+      "_blank",
+    )
+  }
+
   return (
     <div className="mt-5 flex flex-col gap-2">
       <div className="flex justify-between">
@@ -79,6 +103,10 @@ export function Flights({ flights }: { flights: WeatherFlight[] }) {
         />
         <span>🔥🏖️🌡️</span>
       </div>
+
+      <button className="border border-red-500 p-3" onClick={randomFlights}>
+        Take me anywhere
+      </button>
 
       {flights.length === 0 && (
         <div className="text-center">No cheap flights found! (below £100)</div>
