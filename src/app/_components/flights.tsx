@@ -1,17 +1,85 @@
-import dayjs from "dayjs"
-import { useMemo } from "react"
-import { type FlightDestination } from "~/server/api/routers/post"
-import { type RankedFlight } from "~/server/rank"
+"use client"
 
-export function Flights({ flights }: { flights: RankedFlight[] }) {
+import dayjs from "dayjs"
+import { useMemo, useState } from "react"
+import { WeatherFlight, type RankedFlight } from "~/server/rank"
+
+export function Flights({ flights }: { flights: WeatherFlight[] }) {
+  const [volume, setVolume] = useState(0.5)
+
+  const rankedFlights = useMemo(() => {
+    // const minPrice = flights.reduce(
+    //   (min, flight) => (flight.price < min ? flight.price : min),
+    //   Infinity,
+    // )
+    // const maxTemp = flights.reduce(
+    //   (max, flight) => (flight.maxTemp > max ? flight.maxTemp : max),
+    //   -Infinity,
+    // )
+    // console.log(minPrice, maxTemp)
+
+    const maxPrice = flights.reduce(
+      (max, flight) => (flight.price > max ? flight.price : max),
+      -Infinity,
+    )
+    const minTemp = flights.reduce(
+      (min, flight) => (flight.maxTemp < min ? flight.maxTemp : min),
+      Infinity,
+    )
+
+    console.log(maxPrice, minTemp)
+
+    const rankedFlights: RankedFlight[] = flights.map((flight) => {
+      // V algo
+      // const score =
+      //   ((1 / flight.price) * (1 - volume) + flight.maxTemp * volume) /
+      //   (minPrice * (1 - volume) + maxTemp * volume)
+
+      // C algo
+      const tempScore = (flight.maxTemp - minTemp) / minTemp // Normalize temperature to 0-1 range
+      const priceScore = 1 - (flight.price - maxPrice) / maxPrice // Normalize price to 0-1 range (assuming max price is 1000)
+      const score = volume * tempScore + (1 - volume) * priceScore
+
+      return {
+        ...flight,
+        score,
+      }
+    })
+
+    return rankedFlights.sort((a, b) => b.score - a.score)
+  }, [flights, volume])
+
   const [above20, below20] = useMemo(() => {
-    const above = flights.filter((flight) => flight.maxTemp >= 20)
-    const below = flights.filter((flight) => flight.maxTemp < 20)
+    const above = rankedFlights.filter((flight) => flight.maxTemp >= 20)
+    const below = rankedFlights.filter((flight) => flight.maxTemp < 20)
+
     return [above, below] as [RankedFlight[], RankedFlight[]]
-  }, [flights])
+  }, [rankedFlights])
 
   return (
     <div className="mt-5 flex flex-col gap-2">
+      <div className="flex justify-between">
+        <div className="text-left">Cheapest</div>
+        <div className="text-center text-xl">😎</div>
+        <div className="text-right">Hottest</div>
+      </div>
+      <div className="flex space-x-2">
+        <span>💸🤑💸</span>
+
+        <input
+          onChange={(e) => setVolume(parseFloat(e.target.value))}
+          type="range"
+          id="volume"
+          name="volume"
+          min="0"
+          max="1"
+          step="0.1"
+          className="flex-1"
+          value={volume}
+        />
+        <span>🔥🏖️🌡️</span>
+      </div>
+
       {flights.length === 0 && (
         <div className="text-center">No cheap flights found! (below £100)</div>
       )}
@@ -40,7 +108,7 @@ const FlightDestination: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
   return (
     <div className="border border-red-500 p-3">
       <h2 className="text-xl">
-        {flight.destinationFull}: {flight.maxTemp}°C
+        {flight.destinationFull}: {Math.round(flight.maxTemp * 10) / 10}°C
       </h2>
       <small>that temp {dayjs(flight.dayOfMaxTemp).format("dddd MMM D")}</small>
       <br />
@@ -52,7 +120,8 @@ const FlightDestination: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
         <br />
         <span>{flight.flightNumber}</span>
         <br />
-        score {Math.floor(flight.score * 300) / 100}
+        {/* score {Math.floor(flight.score * 300) / 100} */}
+        score {flight.score}
       </small>
       <br />
       <br />

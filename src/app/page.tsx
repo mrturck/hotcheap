@@ -1,6 +1,7 @@
 import { Flights } from "~/app/_components/flights"
-import { getRankedFlights } from "~/server/rank"
+import { RankedFlight, getRankedFlights } from "~/server/rank"
 import { AirportSelect } from "./_components/airport-select"
+import { useMemo } from "react"
 
 export const revalidate = 180
 

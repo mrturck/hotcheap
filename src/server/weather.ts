@@ -37,12 +37,29 @@ export async function getThreeHourlyForecastFiveDays(
     },
   })
 
+  // const threeHourlyForecast = [
+  //   {
+  //     dt: new Date(),
+  //     weather: {
+  //       description: "Sunny",
+  //       icon: { url: "01d" },
+  //       pop: 0,
+  //       temp: {
+  //         cur: 10 + Math.random() * 20,
+  //       },
+  //       feelsLike: {
+  //         cur: 20,
+  //       },
+  //     },
+  //   },
+  // ]
+
   const forecast: WeatherData[] = threeHourlyForecast.map((part) => {
     const {
       weather: { description, icon, pop, temp, feelsLike },
       dt,
-      lat,
-      lon,
+      // lat,
+      // lon,
     } = part
 
     return {

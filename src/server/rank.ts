@@ -2,10 +2,10 @@ import { cache } from "react"
 import { type Flight, getCheapestFlights, ryanairAirports } from "./ryanair"
 import { type AirportWeather, getThreeHourlyForecastFiveDays } from "./weather"
 
-export type RankedFlight = Flight &
-  AirportWeather & {
-    score: number
-  }
+export type WeatherFlight = Flight & AirportWeather
+export type RankedFlight = WeatherFlight & {
+  score: number
+}
 
 export const getRankedFlights = cache(async (airport: string, date: Date) => {
   // const dateStr = req.query.date || new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0];
@@ -42,7 +42,7 @@ export const getRankedFlights = cache(async (airport: string, date: Date) => {
   const airportWeathers = await getAirportWeatherMap(airports)
   console.log("got ", Object.keys(airportWeathers).length, "airport weathers")
 
-  const scoredFlights: RankedFlight[] = flightsData.flatMap((flight) => {
+  const scoredFlights: WeatherFlight[] = flightsData.flatMap((flight) => {
     const weather = airportWeathers[flight.destination]
     if (!weather) return []
     const { maxTemp, dayOfMaxTemp, forecast } = weather
@@ -51,7 +51,7 @@ export const getRankedFlights = cache(async (airport: string, date: Date) => {
         ...flight,
         maxTemp,
         dayOfMaxTemp,
-        score: maxTemp / flight.price,
+        // score: maxTemp / flight.price,
         forecast,
       },
     ]
