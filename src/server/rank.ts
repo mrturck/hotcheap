@@ -1,6 +1,6 @@
 import { cache } from "react"
 import { type Flight, getCheapestFlights, ryanairAirports } from "./ryanair"
-import { type AirportWeather, getThreeHourlyForecastFiveDays } from "./weather"
+import { type AirportWeather, getDailyForecast } from "./weather"
 
 export type WeatherFlight = Flight & AirportWeather
 export type RankedFlight = WeatherFlight & {
@@ -68,11 +68,10 @@ async function getAirportWeatherMap(airports: Set<string>) {
   for (const airport of airports) {
     const airportData = ryanairAirports[airport]
     if (airportData) {
-      const weather = await getThreeHourlyForecastFiveDays(
+      airportWeathers[airport] = await getDailyForecast(
         airportData.latitude,
         airportData.longitude,
       )
-      airportWeathers[airport] = weather
     }
   }
   return airportWeathers
