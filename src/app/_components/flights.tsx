@@ -55,8 +55,7 @@ export function Flights({
   }, [rankedFlights])
 
   function randomFlights(): void {
-    const randomFlight =
-      rankedFlights[Math.floor(Math.random() * rankedFlights.length)]
+    const randomFlight = above20[Math.floor(Math.random() * above20.length)]
     const urlParams = {
       adults: "1",
       teens: "0",
@@ -140,7 +139,6 @@ export function Flights({
 }
 
 const FlightDestination: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
-  console.log(flight.indexOfMaxTemp)
   return (
     <div className="border border-red-500 p-3">
       <h2 className="text-xl">
@@ -149,11 +147,9 @@ const FlightDestination: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
       <small>that temp {dayjs(flight.dayOfMaxTemp).format("dddd MMM D")}</small>
       <br />
       <div className="flex justify-center gap-2">
-        {flight.forecast
-          .slice(flight.indexOfMaxTemp, flight.indexOfMaxTemp! + 5)
-          .map((weather, index) => (
-            <WeatherItem key={index} weather={weather} />
-          ))}
+        {flight.forecast.map((weather, index) => (
+          <WeatherItem key={index} weather={weather} />
+        ))}
       </div>
       Departing {flight.origin} at{" "}
       {dayjs(flight.departureTime).format("HH:mm dddd MMM D")}

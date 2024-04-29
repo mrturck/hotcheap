@@ -85,13 +85,13 @@ export type WeatherData = {
 export type AirportWeather = {
   maxTemp: number
   dayOfMaxTemp: Date
-  indexOfMaxTemp?: number
   forecast: WeatherData[]
 }
 
 export async function getDailyForecast(
   lat: number,
   lon: number,
+  dateFrom: Date,
 ): Promise<AirportWeather> {
   const dailyForecast: WeatherResponse | null = (await fetch(
     `https://api.openweathermap.org/data/2.5/forecast/daily?lat=${lat}&lon=${lon}&cnt=16&units=metric&appid=${env.OPENWEATHER_KEY}`,
@@ -99,38 +99,36 @@ export async function getDailyForecast(
     .then((res) => res.json())
     .catch(console.error)) as WeatherResponse
 
-  const forecast: WeatherData[] = dailyForecast?.list.map((part) => {
-    const {
-      feels_like,
-      temp,
-      weather,
-      dt,
-      // lat,
-      // lon,
-    } = part
+  const forecast: WeatherData[] = dailyForecast?.list
+    .map((part) => {
+      const {
+        feels_like,
+        temp,
+        weather,
+        dt,
+        // lat,
+        // lon,
+      } = part
 
-    return {
-      time: new Date(dt * 1000),
-      description: weather[0]?.description ?? "",
-      temp: temp.day,
-      realFeel: feels_like.day,
-      icon: `https://openweathermap.org/img/w/${weather[0]?.icon ?? ""}.png`,
-      pop: part.pop,
-    }
-  })
-
-  const maxForecast = forecast
+      return {
+        time: new Date(dt * 1000),
+        description: weather[0]?.description ?? "",
+        temp: temp.day,
+        realFeel: feels_like.day,
+        icon: `https://openweathermap.org/img/w/${weather[0]?.icon ?? ""}.png`,
+        pop: part.pop,
+      }
+    })
+    .filter((item) => item.time >= dateFrom)
     .slice(0, 5)
-    .reduce((acc, curr) => (curr.temp > acc.temp ? curr : acc))
 
-  const index = forecast
-    .slice(0, 5)
-    .findIndex((item) => item.temp === maxForecast.temp)
+  const maxForecast = forecast.reduce((acc, curr) =>
+    curr.temp > acc.temp ? curr : acc,
+  )
 
   return {
     maxTemp: maxForecast.temp,
     dayOfMaxTemp: maxForecast.time,
-    indexOfMaxTemp: index,
     forecast,
   }
 }
