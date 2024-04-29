@@ -3,6 +3,7 @@
 import dayjs from "dayjs"
 import { useMemo, useState } from "react"
 import type { WeatherFlight, RankedFlight } from "~/server/rank"
+import type { WeatherData } from "~/server/weather"
 import { Slider } from "~/components/ui/slider"
 import { DateSelect } from "./date-select"
 import { AirportSearch } from "./airport-search"
@@ -54,8 +55,7 @@ export function Flights({
   }, [rankedFlights])
 
   function randomFlights(): void {
-    const randomFlight =
-      rankedFlights[Math.floor(Math.random() * rankedFlights.length)]
+    const randomFlight = above20[Math.floor(Math.random() * above20.length)]
     const urlParams = {
       adults: "1",
       teens: "0",
@@ -110,9 +110,11 @@ export function Flights({
         </div>
       </div>
 
-      <button className="border border-red-500 p-3" onClick={randomFlights}>
-        Take me anywhere
-      </button>
+      {above20.length !== 0 && (
+        <button className="border border-red-500 p-3" onClick={randomFlights}>
+          Take me anywhere
+        </button>
+      )}
 
       {flights.length === 0 && (
         <div className="text-center">No cheap flights found! (below £100)</div>
@@ -146,6 +148,11 @@ const FlightDestination: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
       </h2>
       <small>that temp {dayjs(flight.dayOfMaxTemp).format("dddd MMM D")}</small>
       <br />
+      <div className="flex justify-center gap-2">
+        {flight.forecast.map((weather, index) => (
+          <WeatherItem key={index} weather={weather} />
+        ))}
+      </div>
       Departing {flight.origin} at{" "}
       {dayjs(flight.departureTime).format("HH:mm dddd MMM D")}
       <br />
@@ -153,6 +160,18 @@ const FlightDestination: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
       <br />
       <br />
       <GetFlightLink flight={flight} />
+    </div>
+  )
+}
+
+const WeatherItem: React.FC<{ weather: WeatherData }> = ({ weather }) => {
+  return (
+    <div className="pb-4">
+      <p>
+        {weather.time.getDate()}/{weather.time.getMonth() + 1}
+      </p>
+      <img src={weather.icon} alt="weather icon" />
+      <p>{Math.round(weather.temp * 10) / 10}&deg;C</p>
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import { cache } from "react"
 import { type Flight, getCheapestFlights, ryanairAirports } from "./ryanair"
-import { type AirportWeather, getThreeHourlyForecastFiveDays } from "./weather"
+import { type AirportWeather, getDailyForecast } from "./weather"
 
 export type WeatherFlight = Flight & AirportWeather
 export type RankedFlight = WeatherFlight & {
@@ -38,7 +38,7 @@ export const getRankedFlights = cache(async (airport: string, date: Date) => {
   const airports = new Set(flightsData.map((flight) => flight.destination))
 
   console.log("Trying to fetch weather for airports", airports.size)
-  const airportWeathers = await getAirportWeatherMap(airports)
+  const airportWeathers = await getAirportWeatherMap(airports, dateFrom)
   console.log("got ", Object.keys(airportWeathers).length, "airport weathers")
 
   const scoredFlights: WeatherFlight[] = flightsData.flatMap((flight) => {
@@ -63,16 +63,16 @@ export const getRankedFlights = cache(async (airport: string, date: Date) => {
   return scoredFlights
 })
 
-async function getAirportWeatherMap(airports: Set<string>) {
+async function getAirportWeatherMap(airports: Set<string>, dateFrom: Date) {
   const airportWeathers = {} as Record<string, AirportWeather>
   for (const airport of airports) {
     const airportData = ryanairAirports[airport]
     if (airportData) {
-      const weather = await getThreeHourlyForecastFiveDays(
+      airportWeathers[airport] = await getDailyForecast(
         airportData.latitude,
         airportData.longitude,
+        dateFrom,
       )
-      airportWeathers[airport] = weather
     }
   }
   return airportWeathers
