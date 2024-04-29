@@ -1,11 +1,35 @@
 import dayjs from "dayjs"
+import { useMemo } from "react"
 import { type FlightDestination } from "~/server/api/routers/post"
 import { type RankedFlight } from "~/server/rank"
 
 export function Flights({ flights }: { flights: RankedFlight[] }) {
+  const [above20, below20] = useMemo(() => {
+    const above = flights.filter((flight) => flight.maxTemp >= 20)
+    const below = flights.filter((flight) => flight.maxTemp < 20)
+    return [above, below] as [RankedFlight[], RankedFlight[]]
+  }, [flights])
+
   return (
-    <div className="flex flex-col gap-2">
-      {flights?.map((flight) => (
+    <div className="mt-5 flex flex-col gap-2">
+      {flights.length === 0 && (
+        <div className="text-center">No cheap flights found! (below £100)</div>
+      )}
+      {above20.map((flight) => (
+        <FlightDestination key={flight.flightNumber} flight={flight} />
+      ))}
+
+      {below20.length > 0 && (
+        <>
+          {above20.length === 0 && (
+            <div className="text-center text-lg">No hot flights found. 😔</div>
+          )}
+          <div className="mt-8 text-center text-lg">
+            Destinations that won&apos;t go above 20°C in the next 5 days 🥶
+          </div>
+        </>
+      )}
+      {below20.map((flight) => (
         <FlightDestination key={flight.flightNumber} flight={flight} />
       ))}
     </div>

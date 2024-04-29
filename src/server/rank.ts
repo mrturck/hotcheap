@@ -30,7 +30,7 @@ export const getRankedFlights = cache(async (airport: string, date: Date) => {
     airport,
     dateFrom,
     dateTo,
-    maxPrice: 60,
+    maxPrice: 100,
     limit: process.env.NODE_ENV === "development" ? 10 : undefined,
   })
   console.log("got ", flightsData.length, "flights")
@@ -57,13 +57,11 @@ export const getRankedFlights = cache(async (airport: string, date: Date) => {
     ]
   })
 
-  const flightsGreaterThan20Temp = scoredFlights.filter(
-    ({ maxTemp }) => maxTemp !== undefined && maxTemp > 20,
-  )
+  // const flightsGreaterThan20Temp = scoredFlights.filter(
+  //   ({ maxTemp }) => maxTemp !== undefined && maxTemp > 20,
+  // ).sort((a, b) => b.score - a.score)
 
-  flightsGreaterThan20Temp.sort((a, b) => b.score - a.score)
-
-  return flightsGreaterThan20Temp
+  return scoredFlights
 })
 
 async function getAirportWeatherMap(airports: Set<string>) {

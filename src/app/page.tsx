@@ -1,4 +1,3 @@
-// import { headers } from "next/headers"
 import { Flights } from "~/app/_components/flights"
 import { getRankedFlights } from "~/server/rank"
 import { AirportSelect } from "./_components/airport-select"
@@ -21,11 +20,9 @@ export default async function Home() {
 
   return (
     <div>
-      {/* dropdown of airports */}
       <AirportSelect airport="STN" />
 
       <div className="min-w-full md:min-w-[700px] md:gap-8">
-        {/* <pre className="text-[8px]"></pre> */}
         <Flights flights={flights} />
       </div>
     </div>
