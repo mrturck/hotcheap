@@ -1,6 +1,6 @@
 // import { OWM } from 'openweather-api-node'; // Assuming 'owm-client' is a fictional TypeScript-compatible library for OpenWeatherMap
 
-import { OpenWeatherAPI, DailyWeather } from "openweather-api-node"
+import { OpenWeatherAPI } from "openweather-api-node"
 import { env } from "~/env"
 
 const weather = new OpenWeatherAPI({
