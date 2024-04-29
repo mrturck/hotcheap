@@ -1,15 +1,8 @@
-import type { NextApiRequest, NextApiResponse } from "next"
 import { headers } from "next/headers"
+import { geoHeaders } from "~/server/geo"
 
-// interface ResponseData {
-//   message?: string
-//   headers?: unknown
-// }
-
-export async function GET(
-  req: Request,
-  // res: NextApiResponse<ResponseData>,
-) {
-  const headersList = headers()
-  return Response.json({ headers: [...headersList.entries()] })
+export async function GET() {
+  // const headersList = headers()
+  const geo = geoHeaders()
+  return Response.json({ geo })
 }

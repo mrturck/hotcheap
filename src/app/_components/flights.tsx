@@ -3,21 +3,25 @@
 import dayjs from "dayjs"
 import { useMemo, useState } from "react"
 import type { WeatherFlight, RankedFlight } from "~/server/rank"
+import { Slider } from "~/components/ui/slider"
+import { DateSelect } from "./date-select"
+import { AirportSearch } from "./airport-search"
+import { type GeoHeaders } from "~/server/geo"
 
-export function Flights({ flights }: { flights: WeatherFlight[] }) {
+export function Flights({
+  flights,
+  airport,
+  date,
+  geo,
+}: {
+  flights: WeatherFlight[]
+  airport: string
+  date: Date
+  geo: GeoHeaders
+}) {
   const [volume, setVolume] = useState(0.5)
 
   const rankedFlights = useMemo(() => {
-    // const minPrice = flights.reduce(
-    //   (min, flight) => (flight.price < min ? flight.price : min),
-    //   Infinity,
-    // )
-    // const maxTemp = flights.reduce(
-    //   (max, flight) => (flight.maxTemp > max ? flight.maxTemp : max),
-    //   -Infinity,
-    // )
-    // console.log(minPrice, maxTemp)
-
     const maxPrice = flights.reduce(
       (max, flight) => (flight.price > max ? flight.price : max),
       -Infinity,
@@ -27,14 +31,7 @@ export function Flights({ flights }: { flights: WeatherFlight[] }) {
       Infinity,
     )
 
-    console.log(maxPrice, minTemp)
-
     const rankedFlights: RankedFlight[] = flights.map((flight) => {
-      // V algo
-      // const score =
-      //   ((1 / flight.price) * (1 - volume) + flight.maxTemp * volume) /
-      //   (minPrice * (1 - volume) + maxTemp * volume)
-
       // C algo
       const tempScore = (flight.maxTemp - minTemp) / minTemp // Normalize temperature to 0-1 range
       const priceScore = 1 - (flight.price - maxPrice) / maxPrice // Normalize price to 0-1 range (assuming max price is 1000)
@@ -82,26 +79,35 @@ export function Flights({ flights }: { flights: WeatherFlight[] }) {
 
   return (
     <div className="mt-5 flex flex-col gap-2">
-      <div className="flex justify-between">
-        <div className="text-left">Cheapest</div>
-        <div className="text-center text-xl">😎</div>
-        <div className="text-right">Hottest</div>
-      </div>
-      <div className="flex space-x-2">
-        <span>💸🤑💸</span>
-
-        <input
-          onChange={(e) => setVolume(parseFloat(e.target.value))}
-          type="range"
-          id="volume"
-          name="volume"
-          min="0"
-          max="1"
-          step="0.1"
+      <div className="flex flex-col items-start space-y-2 py-4 text-lg md:flex-row md:items-center md:space-x-3 md:space-y-0">
+        <span>Depart from: </span>
+        <AirportSearch
+          airport={airport}
+          date={date}
           className="flex-1"
-          value={volume}
+          geo={geo}
         />
-        <span>🔥🏖️🌡️</span>
+      </div>
+      <DateSelect airport={airport} date={date} />
+
+      <div>
+        <div className="flex space-x-4 text-xl">
+          <span>💸🤑💸</span>
+          <Slider
+            className="flex-1"
+            value={[volume]}
+            onValueChange={(e) => setVolume(e[0]!)}
+            min={0}
+            max={1}
+            step={0.1}
+          />
+          <span>🔥🏖️🌡️</span>
+        </div>
+        <div className="mb-8 flex justify-between text-xs ">
+          <div className="flex-1 text-left">Cheapest</div>
+          <div className="flex-1 text-center text-xl">↔️</div>
+          <div className="flex-1 text-right">Hottest</div>
+        </div>
       </div>
 
       <button className="border border-red-500 p-3" onClick={randomFlights}>
@@ -143,14 +149,7 @@ const FlightDestination: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
       Departing {flight.origin} at{" "}
       {dayjs(flight.departureTime).format("HH:mm dddd MMM D")}
       <br />
-      <small>
-        {flight.originFull}
-        <br />
-        <span>{flight.flightNumber}</span>
-        <br />
-        {/* score {Math.floor(flight.score * 300) / 100} */}
-        score {flight.score}
-      </small>
+      <small>{flight.originFull}</small>
       <br />
       <br />
       <GetFlightLink flight={flight} />
@@ -181,7 +180,7 @@ const GetFlightLink: React.FC<{ flight: RankedFlight }> = ({
       href={`https://www.ryanair.com/gb/en/trip/flights/select?${new URLSearchParams(urlParams).toString()}`}
       target="_blank"
     >
-      <div className="border bg-green-800 py-3 text-center">
+      <div className="border bg-green-800 py-3 text-center hover:bg-green-600">
         <strong>Buy Now</strong> for {flight.price} {flight.currency}
       </div>
     </a>
