@@ -8,7 +8,7 @@ const weather = new OpenWeatherAPI({
   units: "metric",
 })
 
-type WeatherData = {
+export type WeatherData = {
   time: Date
   description: string
   icon: string

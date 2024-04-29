@@ -3,6 +3,7 @@
 import dayjs from "dayjs"
 import { useMemo, useState } from "react"
 import type { WeatherFlight, RankedFlight } from "~/server/rank"
+import { WeatherData } from "~/server/weather"
 
 export function Flights({ flights }: { flights: WeatherFlight[] }) {
   const [volume, setVolume] = useState(0.5)
@@ -140,6 +141,11 @@ const FlightDestination: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
       </h2>
       <small>that temp {dayjs(flight.dayOfMaxTemp).format("dddd MMM D")}</small>
       <br />
+      <div className="flex justify-center gap-2">
+        {flight.forecast.slice(0, 5).map((weather, index) => (
+          <WeatherItem key={index} weather={weather} />
+        ))}
+      </div>
       Departing {flight.origin} at{" "}
       {dayjs(flight.departureTime).format("HH:mm dddd MMM D")}
       <br />
@@ -154,6 +160,15 @@ const FlightDestination: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
       <br />
       <br />
       <GetFlightLink flight={flight} />
+    </div>
+  )
+}
+
+const WeatherItem: React.FC<{ weather: WeatherData }> = ({ weather }) => {
+  return (
+    <div className="pb-4">
+      <img src={weather.icon} />
+      <p>{Math.round(weather.temp * 10) / 10}&deg;C</p>
     </div>
   )
 }
