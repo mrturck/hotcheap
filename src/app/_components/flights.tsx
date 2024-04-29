@@ -4,7 +4,6 @@ import dayjs from "dayjs"
 import { useMemo, useState } from "react"
 import type { WeatherFlight, RankedFlight } from "~/server/rank"
 import type { WeatherData } from "~/server/weather"
-import Image from "next/image"
 
 export function Flights({ flights }: { flights: WeatherFlight[] }) {
   const [volume, setVolume] = useState(0.5)
@@ -168,7 +167,7 @@ const FlightDestination: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
 const WeatherItem: React.FC<{ weather: WeatherData }> = ({ weather }) => {
   return (
     <div className="pb-4">
-      <Image src={weather.icon} alt="weather icon" />
+      <img src={weather.icon} alt="weather icon" />
       <p>{Math.round(weather.temp * 10) / 10}&deg;C</p>
     </div>
   )
