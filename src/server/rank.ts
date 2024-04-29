@@ -8,32 +8,13 @@ export type RankedFlight = WeatherFlight & {
 }
 
 export const getRankedFlights = cache(async (airport: string, date: Date) => {
-  // const dateStr = req.query.date || new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0];
-  // const airport = "STN"
-  // const today = new Date()
-  // today.setHours(0, 0, 0, 0)
-  // const tomorrow = new Date(today)
-  // tomorrow.setDate(tomorrow.getDate() + 1)
-  // const twoDays = new Date(tomorrow)
-  // twoDays.setDate(twoDays.getDate() + 1)
-  // const threeDays = new Date(twoDays)
-  // threeDays.setDate(threeDays.getDate() + 1)
-
-  date.setHours(0, 0, 0, 0)
-  const dateFrom = new Date(date)
-
-  const dateTo = new Date(dateFrom)
-  dateTo.setDate(dateTo.getDate() + 1)
-
   const flightsData = await getCheapestFlights({
     airport,
-    dateFrom,
-    dateTo,
-    maxPrice: 100,
+    dateFrom: date,
+    dateTo: date,
     limit: process.env.NODE_ENV === "development" ? 10 : undefined,
   })
   console.log("got ", flightsData.length, "flights")
-  // const flightsData = allFlightsData.slice(0, 50)
 
   const airports = new Set(flightsData.map((flight) => flight.destination))
 
@@ -50,15 +31,10 @@ export const getRankedFlights = cache(async (airport: string, date: Date) => {
         ...flight,
         maxTemp,
         dayOfMaxTemp,
-        // score: maxTemp / flight.price,
         forecast,
       },
     ]
   })
-
-  // const flightsGreaterThan20Temp = scoredFlights.filter(
-  //   ({ maxTemp }) => maxTemp !== undefined && maxTemp > 20,
-  // ).sort((a, b) => b.score - a.score)
 
   return scoredFlights
 })
