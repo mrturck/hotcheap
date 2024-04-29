@@ -110,9 +110,11 @@ export function Flights({
         </div>
       </div>
 
-      <button className="border border-red-500 p-3" onClick={randomFlights}>
-        Take me anywhere
-      </button>
+      {above20.length !== 0 && (
+        <button className="border border-red-500 p-3" onClick={randomFlights}>
+          Take me anywhere
+        </button>
+      )}
 
       {flights.length === 0 && (
         <div className="text-center">No cheap flights found! (below £100)</div>
