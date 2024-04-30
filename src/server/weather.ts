@@ -1,12 +1,4 @@
-// import { OWM } from 'openweather-api-node'; // Assuming 'owm-client' is a fictional TypeScript-compatible library for OpenWeatherMap
-
-import { OpenWeatherAPI } from "openweather-api-node"
 import { env } from "~/env"
-
-const weather = new OpenWeatherAPI({
-  key: env.OPENWEATHER_KEY,
-  units: "metric",
-})
 
 interface Coord {
   lon: number
@@ -83,8 +75,7 @@ export type WeatherData = {
 }
 
 export type AirportWeather = {
-  maxTemp: number
-  dayOfMaxTemp: Date
+  avgTemp: number
   forecast: WeatherData[]
 }
 
@@ -92,12 +83,23 @@ export async function getDailyForecast(
   lat: number,
   lon: number,
   dateFrom: Date,
-): Promise<AirportWeather> {
-  const dailyForecast: WeatherResponse | null = (await fetch(
-    `https://api.openweathermap.org/data/2.5/forecast/daily?lat=${lat}&lon=${lon}&cnt=16&units=metric&appid=${env.OPENWEATHER_KEY}`,
-  )
-    .then((res) => res.json())
-    .catch(console.error)) as WeatherResponse
+): Promise<AirportWeather | null> {
+  let dailyForecast: WeatherResponse
+
+  try {
+    const response = await fetch(
+      `https://api.openweathermap.org/data/2.5/forecast/daily?lat=${lat}&lon=${lon}&cnt=16&units=metric&appid=${env.OPENWEATHER_KEY}`,
+      {
+        next: {
+          revalidate: 60 * 30,
+        },
+      },
+    )
+    dailyForecast = (await response.json()) as WeatherResponse
+  } catch (error) {
+    console.error(error)
+    return null
+  }
 
   const forecast: WeatherData[] = dailyForecast?.list
     .map((part) => {
@@ -122,70 +124,11 @@ export async function getDailyForecast(
     .filter((item) => item.time >= dateFrom)
     .slice(0, 5)
 
-  const maxForecast = forecast.reduce((acc, curr) =>
-    curr.temp > acc.temp ? curr : acc,
-  )
+  const avgTemp =
+    forecast.reduce((acc, curr) => acc + curr.temp, 0) / forecast.length
 
   return {
-    maxTemp: maxForecast.temp,
-    dayOfMaxTemp: maxForecast.time,
-    forecast,
-  }
-}
-
-export async function getThreeHourlyForecastFiveDays(
-  lat: number,
-  lon: number,
-): Promise<AirportWeather> {
-  const threeHourlyForecast = await weather.getForecast(undefined, {
-    coordinates: {
-      lat,
-      lon,
-    },
-  })
-
-  // const threeHourlyForecast = [
-  //   {
-  //     dt: new Date(),
-  //     weather: {
-  //       description: "Sunny",
-  //       icon: { url: "01d" },
-  //       pop: 0,
-  //       temp: {
-  //         cur: 10 + Math.random() * 20,
-  //       },
-  //       feelsLike: {
-  //         cur: 20,
-  //       },
-  //     },
-  //   },
-  // ]
-
-  const forecast: WeatherData[] = threeHourlyForecast.map((part) => {
-    const {
-      weather: { description, icon, pop, temp, feelsLike },
-      dt,
-      // lat,
-      // lon,
-    } = part
-
-    return {
-      time: dt,
-      description,
-      temp: temp.cur,
-      realFeel: feelsLike.cur,
-      icon: icon.url,
-      pop,
-    }
-  })
-
-  const maxForecast = forecast.reduce((acc, curr) =>
-    curr.temp > acc.temp ? curr : acc,
-  )
-
-  return {
-    maxTemp: maxForecast.temp,
-    dayOfMaxTemp: maxForecast.time,
+    avgTemp,
     forecast,
   }
 }

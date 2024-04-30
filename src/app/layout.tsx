@@ -23,7 +23,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`font-sans ${inter.variable}`}>
+      <body
+        className={`font-sans ${inter.variable}`}
+        style={{ cursor: "url('/fire.png'), auto" }}
+      >
         <Providers>
           <TRPCReactProvider>
             <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#c58055] to-[#300011] text-white">
@@ -61,6 +64,13 @@ export default function RootLayout({
                     href="https://docs.google.com/forms/d/e/1FAIpQLSfl_axOPN5Fil8s2CQ2tw9-AM9lNkLMq-CNjXGmlz9DcKvJFg/viewform?usp=sf_link"
                   >
                     Contact us ↗️
+                  </a>{" "}
+                  <a
+                    className="font-semibold"
+                    target="_blank"
+                    href="https://discord.gg/WzKwzVdxTw"
+                  >
+                    Discord ↗️
                   </a>{" "}
                   <a
                     className="font-semibold"
