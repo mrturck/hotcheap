@@ -65,6 +65,13 @@ export default function RootLayout({
                   <a
                     className="font-semibold"
                     target="_blank"
+                    href="https://discord.gg/WzKwzVdxTw"
+                  >
+                    Discord ↗️
+                  </a>{" "}
+                  <a
+                    className="font-semibold"
+                    target="_blank"
                     href="https://github.com/rorhug/hotcheap"
                   >
                     GitHub ↗️

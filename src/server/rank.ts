@@ -25,12 +25,11 @@ export const getRankedFlights = cache(async (airport: string, date: Date) => {
   const scoredFlights: WeatherFlight[] = flightsData.flatMap((flight) => {
     const weather = airportWeathers[flight.destination]
     if (!weather) return []
-    const { maxTemp, dayOfMaxTemp, forecast } = weather
+    const { avgTemp, forecast } = weather
     return [
       {
         ...flight,
-        maxTemp,
-        dayOfMaxTemp,
+        avgTemp,
         forecast,
       },
     ]
@@ -44,11 +43,14 @@ async function getAirportWeatherMap(airports: Set<string>, dateFrom: Date) {
   for (const airport of airports) {
     const airportData = ryanairAirports[airport]
     if (airportData) {
-      airportWeathers[airport] = await getDailyForecast(
+      const weather = await getDailyForecast(
         airportData.latitude,
         airportData.longitude,
         dateFrom,
       )
+      if (weather) {
+        airportWeathers[airport] = weather
+      }
     }
   }
   return airportWeathers

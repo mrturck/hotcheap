@@ -28,13 +28,13 @@ export function Flights({
       -Infinity,
     )
     const minTemp = flights.reduce(
-      (min, flight) => (flight.maxTemp < min ? flight.maxTemp : min),
+      (min, flight) => (flight.avgTemp < min ? flight.avgTemp : min),
       Infinity,
     )
 
     const rankedFlights: RankedFlight[] = flights.map((flight) => {
       // C algo
-      const tempScore = (flight.maxTemp - minTemp) / minTemp // Normalize temperature to 0-1 range
+      const tempScore = (flight.avgTemp - minTemp) / minTemp // Normalize temperature to 0-1 range
       const priceScore = 1 - (flight.price - maxPrice) / maxPrice // Normalize price to 0-1 range (assuming max price is 1000)
       const score = volume * tempScore + (1 - volume) * priceScore
 
@@ -48,8 +48,8 @@ export function Flights({
   }, [flights, volume])
 
   const [above20, below20] = useMemo(() => {
-    const above = rankedFlights.filter((flight) => flight.maxTemp >= 20)
-    const below = rankedFlights.filter((flight) => flight.maxTemp < 20)
+    const above = rankedFlights.filter((flight) => flight.avgTemp >= 20)
+    const below = rankedFlights.filter((flight) => flight.avgTemp < 20)
 
     return [above, below] as [RankedFlight[], RankedFlight[]]
   }, [rankedFlights])
@@ -128,8 +128,9 @@ export function Flights({
           {above20.length === 0 && (
             <div className="text-center text-lg">No hot flights found. 😔</div>
           )}
-          <div className="mt-8 text-center text-lg">
-            Destinations that won&apos;t go above 20°C in the next 5 days 🥶
+          <h3 className="mt-12 text-2xl font-bold text-blue-300">🥶 Cold</h3>
+          <div className="mb-4 text-center text-sm">
+            Destinations that average below 20°C the five days after arriving
           </div>
         </>
       )}
@@ -144,10 +145,8 @@ const FlightDestination: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
   return (
     <div className="border border-red-500 p-3">
       <h2 className="text-xl">
-        {flight.destinationFull}: {Math.round(flight.maxTemp * 10) / 10}°C
+        {flight.destinationFull}: {Math.round(flight.avgTemp * 10) / 10}°C
       </h2>
-      <small>that temp {dayjs(flight.dayOfMaxTemp).format("dddd MMM D")}</small>
-      <br />
       <div className="flex justify-center gap-2">
         {flight.forecast.map((weather, index) => (
           <WeatherItem key={index} weather={weather} />
