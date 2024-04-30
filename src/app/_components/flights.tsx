@@ -117,7 +117,7 @@ export function Flights({
       )}
 
       {flights.length === 0 && (
-        <div className="text-center">No cheap flights found! (below £100)</div>
+        <div className="text-center">No flights found!</div>
       )}
       {above20.map((flight) => (
         <FlightDestination key={flight.flightNumber} flight={flight} />
