@@ -19,7 +19,7 @@ export const getRankedFlights = cache(async (airport: string, date: Date) => {
   const airports = new Set(flightsData.map((flight) => flight.destination))
 
   console.log("Trying to fetch weather for airports", airports.size)
-  const airportWeathers = await getAirportWeatherMap(airports, dateFrom)
+  const airportWeathers = await getAirportWeatherMap(airports, date)
   console.log("got ", Object.keys(airportWeathers).length, "airport weathers")
 
   const scoredFlights: WeatherFlight[] = flightsData.flatMap((flight) => {
