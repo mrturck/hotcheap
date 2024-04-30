@@ -23,7 +23,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`font-sans ${inter.variable}`}>
+      <body
+        className={`font-sans ${inter.variable}`}
+        style={{ cursor: "url('/fire.png'), auto" }}
+      >
         <Providers>
           <TRPCReactProvider>
             <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#c58055] to-[#300011] text-white">
