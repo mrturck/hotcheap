@@ -36,17 +36,6 @@ export default function RootLayout({
                 <p className="">
                   Ryanair and EasyJet flights ranked by Summer Magic™️
                 </p>
-                <p className="text-xs font-light">
-                  More features coming soon including weather forecast, date
-                  selection and origins other than Stansted.{" "}
-                  <a
-                    className="font-semibold"
-                    target="_blank"
-                    href="https://github.com/rorhug/hotcheap"
-                  >
-                    Open Source ↗️
-                  </a>
-                </p>
                 <div className="text-xs font-light">
                   Made by{" "}
                   <a
@@ -65,12 +54,29 @@ export default function RootLayout({
                     @rorhug
                   </a>
                   .{" "}
+                </div>
+
+                <div className="text-xs font-light">
                   <a
                     className="font-semibold"
                     target="_blank"
                     href="https://docs.google.com/forms/d/e/1FAIpQLSfl_axOPN5Fil8s2CQ2tw9-AM9lNkLMq-CNjXGmlz9DcKvJFg/viewform?usp=sf_link"
                   >
                     Contact us ↗️
+                  </a>{" "}
+                  <a
+                    className="font-semibold"
+                    target="_blank"
+                    href="https://discord.gg/WzKwzVdxTw"
+                  >
+                    Discord ↗️
+                  </a>{" "}
+                  <a
+                    className="font-semibold"
+                    target="_blank"
+                    href="https://github.com/rorhug/hotcheap"
+                  >
+                    GitHub ↗️
                   </a>
                 </div>
 
