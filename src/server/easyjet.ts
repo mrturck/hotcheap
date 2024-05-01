@@ -45,14 +45,14 @@ interface EasyJetSearchResponse {
 }
 
 export class EasyJet {
-  base_url: string
-  currency_map: Record<string, number> = {
+  baseUrl: string
+  currencyMap: Record<string, number> = {
     EUR: 0,
     CHF: 1,
     GBP: 4,
   }
 
-  availability_defaults: EasyJetSearchOptions = {
+  availabilityDefaults: EasyJetSearchOptions = {
     AllDestinations: true,
     AllOrigins: false,
     AssumedPassengersPerBooking: 1,
@@ -65,7 +65,7 @@ export class EasyJet {
     StartDate: "",
   }
 
-  deeplink_defaults: EasyJetDeepLinkOptions = {
+  deeplinkDefaults: EasyJetDeepLinkOptions = {
     lang: "EN",
     dep: "", // Origin airport code
     dest: "", // Destination airport code
@@ -78,7 +78,7 @@ export class EasyJet {
   }
 
   constructor() {
-    this.base_url = "https://www.easyjet.com"
+    this.baseUrl = "https://www.easyjet.com"
   }
 
   _parseFlight(currency: string, flight: EasyJetFlight): Flight | undefined {
@@ -98,7 +98,7 @@ export class EasyJet {
       price: flight.Price,
       departureTime: dayjs.utc(flight.DepartureDate).toDate(),
       currency: currency,
-      booking_url: this.getDeeplink({
+      bookingUrl: this.getDeeplink({
         dep: flight.OriginIata,
         dest: flight.DestinationIata,
         dd: `${flight.DepartureDate}`,
@@ -109,14 +109,14 @@ export class EasyJet {
   async getAvailability(options: EasyJetSearchOptions): Promise<Flight[]> {
     const { Currency, ...rest } = options
     const processOptions = Object.entries({
-      ...this.availability_defaults,
+      ...this.availabilityDefaults,
       ...rest,
-      CurrencyId: this.currency_map[Currency ?? "GBP"],
+      CurrencyId: this.currencyMap[Currency ?? "GBP"],
     }).map(([key, value]) => [key, String(value)])
 
     const searchParams = new URLSearchParams(processOptions).toString()
     const url = new URL(
-      `${this.base_url}/ejcms/nocache/api/flights/search?${searchParams}`,
+      `${this.baseUrl}/ejcms/nocache/api/flights/search?${searchParams}`,
     )
     const res = await fetch(url.toString())
     const response = (await res.json()) as EasyJetSearchResponse
@@ -127,11 +127,11 @@ export class EasyJet {
 
   getDeeplink(options: EasyJetDeepLinkOptions) {
     const processOptions = Object.entries({
-      ...this.deeplink_defaults,
+      ...this.deeplinkDefaults,
       ...options,
     }).map(([key, value]) => [key, String(value)])
 
     const searchParams = new URLSearchParams(processOptions).toString()
-    return new URL(`${this.base_url}/deeplink?${searchParams}`).toString()
+    return new URL(`${this.baseUrl}/deeplink?${searchParams}`).toString()
   }
 }

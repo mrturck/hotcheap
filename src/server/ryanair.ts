@@ -103,7 +103,7 @@ const parseCheapestFlight = (flight: ApiFlight): Flight => {
     flightNumber: `${flight.flightNumber.slice(0, 2)} ${flight.flightNumber.slice(2)}`,
     price: flight.price.value,
     currency: flight.price.currencyCode,
-    booking_url: getBookingUrl(flight),
+    bookingUrl: getBookingUrl(flight),
   }
 }
 
