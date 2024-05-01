@@ -99,10 +99,6 @@ export class EasyJet {
     this.base_url = "https://www.easyjet.com"
   }
 
-  getAirportByIata(iata: string): Airport | undefined {
-    return this.airports[iata]
-  }
-
   _parseFlight(currency: string, flight: EasyJetFlight): Flight | undefined {
     const originInformation = _easyjetAirports[flight.OriginIata]
     const destinationInformation = _easyjetAirports[flight.DestinationIata]
