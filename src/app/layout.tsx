@@ -33,7 +33,9 @@ export default function RootLayout({
                   <span className="text-[hsl(0,100%,70%)]">&apos;n&apos;</span>
                   Cheap
                 </h1>
-                <p className="">Ryanair flights ranked by Summer Magic™️</p>
+                <p className="">
+                  Ryanair and EasyJet flights ranked by Summer Magic™️
+                </p>
                 <div className="text-xs font-light">
                   Made by{" "}
                   <a

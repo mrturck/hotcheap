@@ -1,6 +1,9 @@
 import { cache } from "react"
-import { type Flight, getCheapestFlights, ryanairAirports } from "./ryanair"
+import { getCheapestFlights, ryanairAirports } from "./ryanair"
 import { type AirportWeather, getDailyForecast } from "./weather"
+import { EasyJet } from "~/server/easyjet"
+import { type Flight } from "~/server/flights"
+import dayjs from "dayjs"
 
 export type WeatherFlight = Flight & AirportWeather
 export type RankedFlight = WeatherFlight & {
@@ -8,12 +11,25 @@ export type RankedFlight = WeatherFlight & {
 }
 
 export const getRankedFlights = cache(async (airport: string, date: Date) => {
-  const flightsData = await getCheapestFlights({
+  const ezj = new EasyJet()
+  const ryanairFlights = await getCheapestFlights({
     airport,
     dateFrom: date,
     dateTo: date,
     limit: process.env.NODE_ENV === "development" ? 10 : undefined,
   })
+
+  const easyjetFlights = await ezj.getAvailability({
+    OriginIatas: airport,
+    PreferredOriginIatas: airport,
+    StartDate: dayjs(date).format("YYYY-MM-DD"),
+    EndDate: dayjs(date).format("YYYY-MM-DD"),
+    MaxPrice: 100,
+    MaxResults: process.env.NODE_ENV === "development" ? 10 : 1000,
+  })
+
+  const flightsData = [...ryanairFlights, ...easyjetFlights]
+
   console.log("got ", flightsData.length, "flights")
 
   const airports = new Set(flightsData.map((flight) => flight.destination))

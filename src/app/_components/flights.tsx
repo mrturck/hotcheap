@@ -56,25 +56,8 @@ export function Flights({
 
   function randomFlights(): void {
     const randomFlight = above20[Math.floor(Math.random() * above20.length)]
-    const urlParams = {
-      adults: "1",
-      teens: "0",
-      children: "0",
-      infants: "0",
-      dateOut: randomFlight!.departureTime.toISOString().slice(0, 10),
-      dateIn: "",
-      isConnectedFlight: "false",
-      discount: "0",
-      promoCode: "",
-      isReturn: "false",
-      originIata: randomFlight!.origin,
-      destinationIata: randomFlight!.destination,
-    }
 
-    window.open(
-      `https://www.ryanair.com/gb/en/trip/flights/select?${new URLSearchParams(urlParams).toString()}`,
-      "_blank",
-    )
+    window.open(randomFlight!.bookingUrl, "_blank")
   }
 
   return (
@@ -119,8 +102,8 @@ export function Flights({
       {flights.length === 0 && (
         <div className="text-center">No flights found!</div>
       )}
-      {above20.map((flight) => (
-        <FlightDestination key={flight.flightNumber} flight={flight} />
+      {above20.map((flight, index) => (
+        <FlightDestination key={flight.flightNumber ?? index} flight={flight} />
       ))}
 
       {below20.length > 0 && (
@@ -134,8 +117,11 @@ export function Flights({
           </div>
         </>
       )}
-      {below20.map((flight) => (
-        <FlightDestination key={flight.flightNumber} flight={flight} />
+      {below20.map((flight, index) => (
+        <FlightDestination
+          key={flight.flightNumber ?? -index - 1}
+          flight={flight}
+        />
       ))}
     </div>
   )
@@ -152,8 +138,18 @@ const FlightDestination: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
           <WeatherItem key={index} weather={weather} />
         ))}
       </div>
-      Departing {flight.origin} at{" "}
-      {dayjs(flight.departureTime).format("HH:mm dddd MMM D")}
+      {flight.airline === "easyjet" && (
+        <p>
+          Departing {flight.origin} on{" "}
+          {dayjs(flight.departureTime).format("dddd MMM D")}
+        </p>
+      )}
+      {flight.airline === "ryanair" && (
+        <p>
+          Departing {flight.origin} at{" "}
+          {dayjs(flight.departureTime).format("HH:mm dddd MMM D")}
+        </p>
+      )}
       <br />
       <small>{flight.originFull}</small>
       <br />
@@ -178,26 +174,8 @@ const WeatherItem: React.FC<{ weather: WeatherData }> = ({ weather }) => {
 const GetFlightLink: React.FC<{ flight: RankedFlight }> = ({
   flight: flight,
 }) => {
-  const urlParams = {
-    adults: "1",
-    teens: "0",
-    children: "0",
-    infants: "0",
-    dateOut: flight.departureTime.toISOString().slice(0, 10),
-    dateIn: "",
-    isConnectedFlight: "false",
-    discount: "0",
-    promoCode: "",
-    isReturn: "false",
-    originIata: flight.origin,
-    destinationIata: flight.destination,
-  }
-
   return (
-    <a
-      href={`https://www.ryanair.com/gb/en/trip/flights/select?${new URLSearchParams(urlParams).toString()}`}
-      target="_blank"
-    >
+    <a href={flight.bookingUrl} target="_blank">
       <div className="border bg-green-800 py-3 text-center hover:bg-green-600">
         <strong>Buy Now</strong> for {flight.price} {flight.currency}
       </div>
