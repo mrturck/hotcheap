@@ -1,4 +1,4 @@
-import { _easyjetAirports, type Airport } from "~/server/airports"
+import { _easyjetAirports } from "~/server/airports"
 import type { Flight } from "~/server/flights"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
