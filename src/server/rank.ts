@@ -12,12 +12,12 @@ export type RankedFlight = WeatherFlight & {
 
 export const getRankedFlights = cache(async (airport: string, date: Date) => {
   const ezj = new EasyJet()
-    const ryanairFlights = await getCheapestFlights({
-        airport,
-        dateFrom: date,
-        dateTo: date,
-        limit: process.env.NODE_ENV === "development" ? 10 : undefined,
-    })
+  const ryanairFlights = await getCheapestFlights({
+    airport,
+    dateFrom: date,
+    dateTo: date,
+    limit: process.env.NODE_ENV === "development" ? 10 : undefined,
+  })
 
   const easyjetFlights = await ezj.getAvailability({
     OriginIatas: airport,
@@ -30,7 +30,7 @@ export const getRankedFlights = cache(async (airport: string, date: Date) => {
 
   const flightsData = [...ryanairFlights, ...easyjetFlights]
 
-    console.log("got ", flightsData.length, "flights")
+  console.log("got ", flightsData.length, "flights")
 
   const airports = new Set(flightsData.map((flight) => flight.destination))
 
