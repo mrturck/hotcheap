@@ -2,7 +2,7 @@
 // also used https://github.com/ryanair/ryanair-flight-search-api/blob/main/src/main/java/com/ryanair/flightsearch/api/v1/model/FlightSearchRequest.java
 import utc from "dayjs/plugin/utc"
 import { _ryanairAirports, type Airport, type RyanairAirport } from "./airports"
-import { Flight } from "~/server/flights"
+import type { Flight } from "~/server/flights"
 import dayjs from "dayjs"
 
 dayjs.extend(utc)
