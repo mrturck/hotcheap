@@ -1,8 +1,11 @@
 // Inspired by https://github.com/megaloss/Airfaresearch/blob/25367e1407fd2675c6c0e544fa7e7a859fac180a/ryanair.py#L49
 // also used https://github.com/ryanair/ryanair-flight-search-api/blob/main/src/main/java/com/ryanair/flightsearch/api/v1/model/FlightSearchRequest.java
-
+import utc from "dayjs/plugin/utc"
 import { _ryanairAirports, type Airport, type RyanairAirport } from "./airports"
 import { Flight } from "~/server/flights"
+import dayjs from "dayjs"
+
+dayjs.extend(utc)
 
 interface ApiFlight {
   departureAirport: {
@@ -69,6 +72,25 @@ const retryableQuery = async (
   }
 }
 
+const getBookingUrl = (flight: ApiFlight): string => {
+  const urlParams = {
+    adults: "1",
+    teens: "0",
+    children: "0",
+    infants: "0",
+    dateOut: dayjs.utc(flight.departureDate).format("YYYY-MM-DD"),
+    dateIn: "",
+    isConnectedFlight: "false",
+    discount: "0",
+    promoCode: "",
+    isReturn: "false",
+    originIata: flight.departureAirport.iataCode,
+    destinationIata: flight.arrivalAirport.iataCode,
+  }
+
+  return `https://www.ryanair.com/gb/en/trip/flights/select?${new URLSearchParams(urlParams).toString()}`
+}
+
 // Function to parse flight data
 const parseCheapestFlight = (flight: ApiFlight): Flight => {
   return {
@@ -81,6 +103,7 @@ const parseCheapestFlight = (flight: ApiFlight): Flight => {
     flightNumber: `${flight.flightNumber.slice(0, 2)} ${flight.flightNumber.slice(2)}`,
     price: flight.price.value,
     currency: flight.price.currencyCode,
+    booking_url: getBookingUrl(flight),
   }
 }
 

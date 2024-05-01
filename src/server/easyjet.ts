@@ -2,6 +2,9 @@ import { _easyjetAirports, Airport, EasyJetAirport } from "~/server/airports"
 
 import { Flight } from "~/server/flights"
 import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
+
+dayjs.extend(utc)
 
 export type EasyJetSearchOptions = {
   OriginIatas: string // Comma-separated list of airport codes
@@ -116,9 +119,9 @@ export class EasyJet {
       destination: flight.DestinationIata,
       destinationFull: `${destinationInformation.name}, ${destinationInformation.country}`,
       price: flight.Price,
-      departureTime: dayjs(flight.DepartureDate).toDate(),
+      departureTime: dayjs.utc(flight.DepartureDate).toDate(),
       currency: currency,
-      url: this.getDeeplink({
+      booking_url: this.getDeeplink({
         dep: flight.OriginIata,
         dest: flight.DestinationIata,
         dd: `${flight.DepartureDate}`,

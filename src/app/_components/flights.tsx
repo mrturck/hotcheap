@@ -72,7 +72,7 @@ export function Flights({
     }
 
     window.open(
-      randomFlight!.url ??
+      randomFlight!.booking_url ??
         `https://www.ryanair.com/gb/en/trip/flights/select?${new URLSearchParams(urlParams).toString()}`,
       "_blank",
     )
@@ -135,8 +135,11 @@ export function Flights({
           </div>
         </>
       )}
-      {below20.map((flight) => (
-        <FlightDestination key={flight.flightNumber} flight={flight} />
+      {below20.map((flight, index) => (
+        <FlightDestination
+          key={flight.flightNumber ?? -index - 1}
+          flight={flight}
+        />
       ))}
     </div>
   )
@@ -179,36 +182,8 @@ const WeatherItem: React.FC<{ weather: WeatherData }> = ({ weather }) => {
 const GetFlightLink: React.FC<{ flight: RankedFlight }> = ({
   flight: flight,
 }) => {
-  if (flight.airline === "ryanair") {
-    const urlParams = {
-      adults: "1",
-      teens: "0",
-      children: "0",
-      infants: "0",
-      dateOut: flight.departureTime.toISOString().slice(0, 10),
-      dateIn: "",
-      isConnectedFlight: "false",
-      discount: "0",
-      promoCode: "",
-      isReturn: "false",
-      originIata: flight.origin,
-      destinationIata: flight.destination,
-    }
-
-    return (
-      <a
-        href={`https://www.ryanair.com/gb/en/trip/flights/select?${new URLSearchParams(urlParams).toString()}`}
-        target="_blank"
-      >
-        <div className="border bg-green-800 py-3 text-center hover:bg-green-600">
-          <strong>Buy Now</strong> for {flight.price} {flight.currency}
-        </div>
-      </a>
-    )
-  }
-
   return (
-    <a href={flight.url} target="_blank">
+    <a href={flight.booking_url} target="_blank">
       <div className="border bg-green-800 py-3 text-center hover:bg-green-600">
         <strong>Buy Now</strong> for {flight.price} {flight.currency}
       </div>

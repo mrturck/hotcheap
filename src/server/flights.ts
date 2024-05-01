@@ -9,5 +9,5 @@ export type Flight = {
   flightNumber?: string
   price: number
   currency: string
-  url?: string
+  booking_url: string
 }
