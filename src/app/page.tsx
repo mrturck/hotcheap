@@ -10,7 +10,6 @@ export default async function Home() {
 
   const airport = "STN"
   const flights = await getRankedFlights(airport, tomorrow)
-
   const geo = geoHeaders()
 
   return (

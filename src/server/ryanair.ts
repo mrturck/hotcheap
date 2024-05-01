@@ -1,25 +1,8 @@
 // Inspired by https://github.com/megaloss/Airfaresearch/blob/25367e1407fd2675c6c0e544fa7e7a859fac180a/ryanair.py#L49
 // also used https://github.com/ryanair/ryanair-flight-search-api/blob/main/src/main/java/com/ryanair/flightsearch/api/v1/model/FlightSearchRequest.java
 
-import { type Airport, type RyanairAirport, _ryanairAirports } from "./airports"
-
-// Define interfaces for types used in the module
-export type Flight = {
-  origin: string
-  originFull: string
-  destination: string
-  destinationFull: string
-  departureTime: Date
-  flightNumber: string
-  price: number
-  currency: string
-}
-
-// interface Trip {
-//   outbound: Flight
-//   inbound: Flight
-//   totalPrice: number
-// }
+import { _ryanairAirports, type Airport, type RyanairAirport } from "./airports"
+import { Flight } from "~/server/flights"
 
 interface ApiFlight {
   departureAirport: {
@@ -89,6 +72,7 @@ const retryableQuery = async (
 // Function to parse flight data
 const parseCheapestFlight = (flight: ApiFlight): Flight => {
   return {
+    airline: "ryanair",
     origin: flight.departureAirport.iataCode,
     originFull: `${flight.departureAirport.name}, ${flight.departureAirport.countryName}`,
     destination: flight.arrivalAirport.iataCode,
@@ -100,7 +84,7 @@ const parseCheapestFlight = (flight: ApiFlight): Flight => {
   }
 }
 
-// Function to fetch cheapest flights
+// Function to fetch the cheapest flights
 const getCheapestFlights = async (params: {
   airport: string
   dateFrom: Date | string

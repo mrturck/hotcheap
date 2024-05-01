@@ -54,14 +54,11 @@ export function AirportSearch({
   className?: string
 }) {
   const router = useRouter()
-  console.log("starting", airport)
-
   const [selectedAirport, setSelectedAirport] = useState<Airport | undefined>(
     airport ? ryanairAirports[airport] : undefined,
   )
 
   const setAirport = (airport: Airport | undefined) => {
-    console.log(airport)
     setSelectedAirport(airport)
     if (airport) {
       router.push(`/origin/${airport.iata}/${date.toISOString().split("T")[0]}`)
