@@ -77,24 +77,6 @@ export class EasyJet {
     spnl: 0,
   }
 
-  airports: Record<string, Airport> = Object.keys(_easyjetAirports).reduce(
-    (acc: Record<string, Airport>, key: string) => {
-      const airport = _easyjetAirports[key]
-      if (airport) {
-        acc[key] = {
-          iata: key,
-          name: airport.name,
-          country: airport.countryCode,
-          timeZone: "",
-          latitude: airport.latitude,
-          longitude: airport.longitude,
-        }
-      }
-      return acc
-    },
-    {} as Record<string, Airport>,
-  )
-
   constructor() {
     this.base_url = "https://www.easyjet.com"
   }
