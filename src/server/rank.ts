@@ -25,7 +25,7 @@ export const getRankedFlights = cache(async (airport: string, date: Date) => {
     StartDate: dayjs(date).format("YYYY-MM-DD"),
     EndDate: dayjs(date).format("YYYY-MM-DD"),
     MaxPrice: 100,
-    MaxResults: 100,
+    MaxResults: process.env.NODE_ENV === "development" ? 10 : 1000,
   })
 
   const flightsData = [...ryanairFlights, ...easyjetFlights]
