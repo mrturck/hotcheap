@@ -138,7 +138,7 @@ function AirportCountryGroups({
 
   return (
     <Command>
-      <CommandInput placeholder="Select an airport..." />
+      <CommandInput placeholder="Select an airport..." className="text-lg" />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
 
