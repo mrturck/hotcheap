@@ -5,6 +5,8 @@ import { Inter } from "next/font/google"
 import { TRPCReactProvider } from "~/trpc/react"
 import Providers from "./_components/client-providers"
 
+import { Analytics } from "@vercel/analytics/react"
+
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -23,6 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <Analytics />
       <body className={`font-sans ${inter.variable}`}>
         <Providers>
           <TRPCReactProvider>
