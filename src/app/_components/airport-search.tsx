@@ -153,8 +153,12 @@ function AirportCountryGroups({
                   setOpen(false)
                 }}
                 className="cursor-pointer"
+                keywords={[airport.name, airport.iata]}
               >
-                {airport.name}
+                {airport.name}{" "}
+                <span className="ml-2 text-xs text-gray-400">
+                  {airport.iata}
+                </span>
               </CommandItem>
             ))}
           </CommandGroup>
