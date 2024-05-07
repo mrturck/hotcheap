@@ -8,6 +8,7 @@ import { Slider } from "~/components/ui/slider"
 import { DateSelect } from "./date-select"
 import { AirportSearch } from "./airport-search"
 import { type GeoHeaders } from "~/server/geo"
+import { airportsByCountry, allAirports } from "~/server/airports"
 
 export function Flights({
   flights,
@@ -128,32 +129,51 @@ export function Flights({
 }
 
 const FlightDestination: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
+  const airport = allAirports[flight.destination]
+  const country = airport && airportsByCountry[airport.country]
+
+  if (!country?.flagUrl) {
+    console.log(airport, country)
+  }
+
   return (
-    <div className="border border-red-500 p-3">
-      <h2 className="text-xl">
-        {flight.destinationFull}: {Math.round(flight.avgTemp * 10) / 10}°C
-      </h2>
+    <div className="flex flex-col gap-6 border border-red-500 p-3">
+      <div className="flex w-full flex-col items-center justify-between gap-2 sm:flex-row">
+        <div className="flex-1 basis-1/4 text-left">
+          {country?.flagUrl && (
+            <img
+              src={country.flagUrl}
+              alt={`${country.code} flag`}
+              className="inline-block h-6"
+            />
+          )}
+        </div>
+        {/* <div className="h-3 flex-1 bg-green-300">yo2</div> */}
+        <h2 className="w-full basis-1/2 self-start text-center text-xl">
+          {flight.destinationFull}: {Math.round(flight.avgTemp * 10) / 10}°C
+        </h2>
+        {/* <div className="h-3 flex-1 bg-green-300">yoooooooooooooo</div> */}
+        <div className="flex basis-1/4 items-center justify-end text-right">
+          <img
+            src={`/${flight.airline}.svg`}
+            className="h-4"
+            alt={flight.airline}
+          />
+        </div>
+      </div>
       <div className="flex justify-center gap-2">
         {flight.forecast.map((weather, index) => (
           <WeatherItem key={index} weather={weather} />
         ))}
       </div>
-      {flight.airline === "easyjet" && (
-        <p>
-          Departing {flight.origin} on{" "}
-          {dayjs(flight.departureTime).format("dddd MMM D")}
-        </p>
-      )}
-      {flight.airline === "ryanair" && (
-        <p>
-          Departing {flight.origin} at{" "}
-          {dayjs(flight.departureTime).format("HH:mm dddd MMM D")}
-        </p>
-      )}
-      <br />
-      <small>{flight.originFull}</small>
-      <br />
-      <br />
+      <p className="text-sm">
+        {flight.origin} 🛬 {flight.destination}
+        <br />
+        {dayjs(flight.departureTime).format(
+          flight.airline === "easyjet" ? "dddd MMM D" : "HH:mm dddd MMM D",
+        )}{" "}
+      </p>
+
       <GetFlightLink flight={flight} />
     </div>
   )
@@ -161,11 +181,11 @@ const FlightDestination: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
 
 const WeatherItem: React.FC<{ weather: WeatherData }> = ({ weather }) => {
   return (
-    <div className="pb-4">
+    <div className="flex flex-col items-center text-xs">
       <p>
         {weather.time.getDate()}/{weather.time.getMonth() + 1}
       </p>
-      <img src={weather.icon} alt="weather icon" />
+      <img src={weather.icon} alt="weather icon" height={30} width={30} />
       <p>{Math.round(weather.temp * 10) / 10}&deg;C</p>
     </div>
   )

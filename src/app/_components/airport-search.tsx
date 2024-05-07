@@ -21,26 +21,14 @@ import {
 } from "~/components/ui/popover"
 import { useMediaQuery } from "~/hooks/use-media-query"
 import { cn } from "~/lib/utils"
-import { type Airport } from "~/server/airports"
 import { type GeoHeaders } from "~/server/geo"
-import { ryanairAirports } from "~/server/ryanair"
-
-const airportsByCountry = Object.values(ryanairAirports).reduce(
-  (acc, airport) => {
-    const country = airport.country
-    const ports = acc[country]
-    if (ports) {
-      ports.push(airport)
-      ports.sort((a, b) => a.name.localeCompare(b.name))
-    } else {
-      acc[country] = [airport]
-    }
-    return acc
-  },
-  {} as Record<string, Airport[]>,
-)
-
-const countriesAlpha = Object.keys(airportsByCountry).sort()
+// import { ryanairAirports } from "~/server/ryanair"
+import {
+  type Airport,
+  allAirports,
+  countriesAlpha,
+  airportsByCountry,
+} from "~/server/airports"
 
 export function AirportSearch({
   airport,
@@ -55,7 +43,7 @@ export function AirportSearch({
 }) {
   const router = useRouter()
   const [selectedAirport, setSelectedAirport] = useState<Airport | undefined>(
-    airport ? ryanairAirports[airport] : undefined,
+    airport ? allAirports[airport] : undefined,
   )
 
   const setAirport = (airport: Airport | undefined) => {
@@ -144,16 +132,16 @@ function AirportCountryGroups({
 
         {countries.map((country) => (
           <CommandGroup heading={country} key={country}>
-            {airportsByCountry[country]?.map((airport) => (
+            {airportsByCountry[country]?.airports?.map((airport) => (
               <CommandItem
                 key={airport.name}
                 value={airport.iata}
                 onSelect={(value) => {
-                  setAirport(ryanairAirports[value])
+                  setAirport(allAirports[value])
                   setOpen(false)
                 }}
                 className="cursor-pointer"
-                keywords={[airport.name, airport.iata]}
+                keywords={[airport.iata, airport.name]}
               >
                 {airport.name}{" "}
                 <span className="ml-2 text-xs text-gray-400">

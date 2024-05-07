@@ -2,10 +2,9 @@
 
 import { useRouter } from "next-nprogress-bar"
 import { useState } from "react"
-import { type Airport } from "~/server/airports"
-import { ryanairAirports } from "~/server/ryanair"
+import { type Airport, allAirports } from "~/server/airports"
 
-const airportsByCountry = Object.values(ryanairAirports).reduce(
+const airportsByCountry = Object.values(allAirports).reduce(
   (acc, airport) => {
     const country = airport.country
     const ports = acc[country]
@@ -24,7 +23,7 @@ const countriesAlpha = Object.keys(airportsByCountry).sort()
 export const AirportSelect = ({ airport }: { airport: string }) => {
   const router = useRouter()
   const [selectedAirport, setAirport] = useState<
-    keyof typeof ryanairAirports | undefined
+    keyof typeof allAirports | undefined
   >(airport ?? "STN")
 
   // on select, change page

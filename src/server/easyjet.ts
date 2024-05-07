@@ -1,7 +1,7 @@
-import { _easyjetAirports } from "~/server/airports"
 import type { Flight } from "~/server/flights"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
+import { allAirports } from "./airports"
 
 dayjs.extend(utc)
 
@@ -82,8 +82,8 @@ export class EasyJet {
   }
 
   _parseFlight(currency: string, flight: EasyJetFlight): Flight | undefined {
-    const originInformation = _easyjetAirports[flight.OriginIata]
-    const destinationInformation = _easyjetAirports[flight.DestinationIata]
+    const originInformation = allAirports[flight.OriginIata]
+    const destinationInformation = allAirports[flight.DestinationIata]
 
     if (!originInformation || !destinationInformation) {
       return undefined
@@ -108,21 +108,31 @@ export class EasyJet {
 
   async getAvailability(options: EasyJetSearchOptions): Promise<Flight[]> {
     const { Currency, ...rest } = options
-    const processOptions = Object.entries({
+
+    const params = {
       ...this.availabilityDefaults,
       ...rest,
       CurrencyId: this.currencyMap[Currency ?? "GBP"],
-    }).map(([key, value]) => [key, String(value)])
+    }
+    console.log("easyjet search", JSON.stringify(params))
 
+    const processOptions = Object.entries(params).map(([key, value]) => [
+      key,
+      String(value),
+    ])
     const searchParams = new URLSearchParams(processOptions).toString()
+
     const url = new URL(
       `${this.baseUrl}/ejcms/nocache/api/flights/search?${searchParams}`,
     )
     const res = await fetch(url.toString())
     const response = (await res.json()) as EasyJetSearchResponse
-    return response.Flights.map((flight) =>
+    const flights = response.Flights.map((flight) =>
       this._parseFlight(Currency ?? "GBP", flight),
     ).filter((flight) => flight) as Flight[]
+
+    console.log("easyjet flights", flights.length)
+    return flights
   }
 
   getDeeplink(options: EasyJetDeepLinkOptions) {
