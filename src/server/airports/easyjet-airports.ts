@@ -1,6 +1,8 @@
 import { type EasyJetAirport } from "."
 
-// TODO: add source so we can update it in future
+// SOURCE
+// https://colab.research.google.com/drive/1CIYCuBCMTUvzDCQXFaAAYSPqkVexBhPe?usp=sharing
+// https://www.flightconnections.com/route-map-easyjet-u2
 
 export const _easyjetAirports: Record<string, EasyJetAirport> = {
   TIA: {

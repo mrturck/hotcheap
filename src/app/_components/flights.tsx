@@ -148,11 +148,9 @@ const FlightDestination: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
             />
           )}
         </div>
-        {/* <div className="h-3 flex-1 bg-green-300">yo2</div> */}
         <h2 className="w-full basis-1/2 self-start text-center text-xl">
           {flight.destinationFull}: {Math.round(flight.avgTemp * 10) / 10}°C
         </h2>
-        {/* <div className="h-3 flex-1 bg-green-300">yoooooooooooooo</div> */}
         <div className="flex basis-1/4 items-center justify-end text-right">
           <img
             src={`/${flight.airline}.svg`}
