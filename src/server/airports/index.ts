@@ -120,7 +120,9 @@ export const allAirports = Object.keys(_easyjetAirports).reduce((acc, key) => {
   return acc
 }, ryanairAirports)
 
-export const airportsByCountry = Object.values(allAirports).reduce(
+export const allAirportsArray = Object.values(allAirports)
+
+export const airportsByCountry = allAirportsArray.reduce(
   (acc, airport) => {
     const code = airport.country
     const country = acc[code]
@@ -139,3 +141,60 @@ export const airportsByCountry = Object.values(allAirports).reduce(
 )
 
 export const countriesAlpha = Object.keys(airportsByCountry).sort()
+
+export const closestAirport = (
+  airports: Airport[],
+  lat: number,
+  lon: number,
+) => {
+  return airports.reduce<
+    | {
+        distance: number
+        airport: Airport
+      }
+    | undefined
+  >((acc, airport) => {
+    const distance = haversine(lat, lon, airport.latitude, airport.longitude)
+    if (!acc || distance < acc.distance) {
+      return { distance, airport }
+    }
+    return acc
+  }, undefined)
+}
+
+const haversine = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+  const R = 6371 // Earth's radius in km
+  const dLat = toRadians(lat2 - lat1)
+  const dLon = toRadians(lon2 - lon1)
+
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRadians(lat1)) *
+      Math.cos(toRadians(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2)
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+
+  const distance = R * c // Distance in km
+  return distance
+}
+
+const toRadians = (degrees: number) => {
+  return degrees * (Math.PI / 180)
+}
+
+// export const getClosestAirportForCountry = (
+//   countryCode: string,
+//   lat: number,
+//   lon: number,
+// ) => {
+//   const country = airportsByCountry[countryCode]
+//   if (!country) {
+//     return undefined
+//   }
+//   return closestAirport(country.airports, lat, lon)
+// }
+
+export const getClosestAirport = (lat: number, lon: number) => {
+  return closestAirport(allAirportsArray, lat, lon)
+}

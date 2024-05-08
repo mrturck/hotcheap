@@ -2,9 +2,13 @@
 
 import { useRouter } from "next-nprogress-bar"
 import { useState } from "react"
-import { type Airport, allAirports } from "~/server/airports"
+import {
+  type Airport,
+  type allAirports,
+  allAirportsArray,
+} from "~/server/airports"
 
-const airportsByCountry = Object.values(allAirports).reduce(
+const airportsByCountry = allAirportsArray.reduce(
   (acc, airport) => {
     const country = airport.country
     const ports = acc[country]

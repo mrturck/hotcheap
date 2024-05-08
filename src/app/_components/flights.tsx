@@ -165,11 +165,11 @@ const FlightDestination: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
         ))}
       </div>
       <p className="text-sm">
-        {flight.origin} 🛬 {flight.destination}
-        <br />
         {dayjs(flight.departureTime).format(
           flight.airline === "easyjet" ? "dddd MMM D" : "HH:mm dddd MMM D",
         )}{" "}
+        <br />
+        {flight.origin} 🛬 {flight.destination}
       </p>
 
       <GetFlightLink flight={flight} />
