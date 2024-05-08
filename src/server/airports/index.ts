@@ -120,7 +120,9 @@ export const allAirports = Object.keys(_easyjetAirports).reduce((acc, key) => {
   return acc
 }, ryanairAirports)
 
-export const allAirportsArray = Object.values(allAirports)
+export const allAirportsArray = Object.values(allAirports).sort((a, b) =>
+  a.name.localeCompare(b.name),
+)
 
 export const airportsByCountry = allAirportsArray.reduce(
   (acc, airport) => {
@@ -128,7 +130,7 @@ export const airportsByCountry = allAirportsArray.reduce(
     const country = acc[code]
     if (country) {
       country.airports.push(airport)
-      country.airports.sort((a, b) => a.name.localeCompare(b.name))
+      // country.airports.sort((a, b) => a.name.localeCompare(b.name))
       if (!country.flagUrl) {
         country.flagUrl = airport.flagUrl
       }
