@@ -172,7 +172,14 @@ const FlightDestination: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
         {flight.origin} 🛬 {flight.destination}
       </p>
 
-      <GetFlightLink flight={flight} />
+      <div className="flex gap-x-2">
+        <div className="basis-1/3">
+          <BookingButton flight={flight} />
+        </div>
+        <div className="basis-2/3">
+          <GetFlightLink flight={flight} />
+        </div>
+      </div>
     </div>
   )
 }
@@ -195,7 +202,32 @@ const GetFlightLink: React.FC<{ flight: RankedFlight }> = ({
   return (
     <a href={flight.bookingUrl} target="_blank">
       <div className="border bg-green-800 py-3 text-center hover:bg-green-600">
-        <strong>Buy Now</strong> for {flight.price} {flight.currency}
+        🛩️ <strong>Buy Now</strong> for {flight.price} {flight.currency}
+      </div>
+    </a>
+  )
+}
+
+const BookingButton: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
+  // const href = `https://www.booking.com/searchresults.en-gb.html?ss=Ibiza&efdco=1&label=gen173nr-1FCAEoggI46AdIM1gEaFCIAQGYAQm4AQfIAQzYAQHoAQH4AQuIAgGoAgO4Aoymj7IGwAIB0gIkYWI0OGU1NzYtZTg1MS00NTEwLWFjMjctNmE4NGUwNTNkOTY12AIG4AIB&sid=a1535b034e54352eb8f64879eba6466d&aid=304142&lang=en-gb&sb=1&src_elem=sb&src=index&dest_id=1408&dest_type=region&ac_position=0&ac_click_type=b&ac_langcode=en&ac_suggestion_list_length=5&search_selected=true&search_pageview_id=87f894c6958f0095&ac_meta=GhA4N2Y4OTRjNjk1OGYwMDk1IAAoATICZW46BWliaXphQABKAFAA&checkin=2024-05-16&checkout=2024-05-18&group_adults=2&no_rooms=1&group_children=0`
+
+  const { destinationFull, departureTime } = flight
+
+  if (!departureTime) {
+    return null
+  }
+
+  const dayjsObject = dayjs(departureTime)
+
+  const checkin = dayjsObject.format("YYYY-MM-DD")
+  const checkout = dayjsObject.add(4, "days").format("YYYY-MM-DD")
+
+  const href = `https://www.booking.com/searchresults.html?ss=${destinationFull}&efdco=1&sb=1&src_elem=sb&src=index&dest_type=region&ac_position=0&ac_click_type=b&ac_langcode=en&ac_suggestion_list_length=5&search_selected=true&checkin=${checkin}&checkout=${checkout}&group_adults=2&no_rooms=1&group_children=0`
+
+  return (
+    <a href={href} target="_blank">
+      <div className="border bg-blue-800 py-3 text-center hover:bg-blue-600">
+        🛌 Find a Stay
       </div>
     </a>
   )

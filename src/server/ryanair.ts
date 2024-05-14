@@ -160,3 +160,57 @@ export const getCheapestFlights = async (params: {
   console.info("got ryanair flights", asFlights.length)
   return asFlights
 }
+
+// export const getCheapestFlightsReturn = async (params: {
+//   airport: string
+//   dateFrom: Date | string
+//   dateTo: Date | string
+//   destinationCountry?: string
+//   customParams?: Record<string, string>
+//   departureTimeFrom?: Date | string
+//   departureTimeTo?: Date | string
+//   maxPrice?: number
+//   destinationAirport?: string
+//   limit?: number
+//   offset?: number
+// }): Promise<Flight[]> => {
+//   const queryUrl = `${BASE_SERVICES_API_URL}oneWayFares`
+//   const queryParams = {
+//     ...(params.limit && { limit: params.limit.toString() }),
+//     ...(params.offset && { offset: params.offset.toString() }),
+//     // priceValueTo: "4",
+//     market: "en-gb",
+//     language: "en",
+//     departureAirportIataCode: params.airport,
+//     outboundDepartureDateFrom: formatDateForApi(params.dateFrom),
+//     outboundDepartureDateTo: formatDateForApi(params.dateTo),
+//     outboundDepartureTimeFrom: formatTimeForApi(
+//       params.departureTimeFrom ?? "00:00",
+//     ),
+//     outboundDepartureTimeTo: formatTimeForApi(
+//       params.departureTimeTo ?? "23:59",
+//     ),
+//     ...(params.destinationCountry && {
+//       arrivalCountryCode: params.destinationCountry,
+//     }),
+//     ...(params.maxPrice && { priceValueTo: params.maxPrice.toString() }),
+//     ...(params.destinationAirport && {
+//       arrivalAirportIataCode: params.destinationAirport,
+//     }),
+//     ...params.customParams,
+//   }
+
+//   console.info("ryanair search", JSON.stringify(queryParams))
+
+//   const queryParamsObject = new URLSearchParams(queryParams)
+
+//   const response = (await retryableQuery(
+//     queryUrl,
+//     queryParamsObject,
+//   )) as ApiResponse
+//   const asFlights = response.fares.map((fare) =>
+//     parseCheapestFlight(fare.outbound),
+//   )
+//   console.info("got ryanair flights", asFlights.length)
+//   return asFlights
+// }

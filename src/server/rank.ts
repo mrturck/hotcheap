@@ -12,11 +12,12 @@ export type RankedFlight = WeatherFlight & {
 }
 
 export const getRankedFlights = cache(async (airport: string, date: Date) => {
+  const limit = process.env.NODE_ENV === "development" ? 5 : 1000
   const ryanairFlights = getCheapestFlights({
     airport,
     dateFrom: date,
     dateTo: date,
-    limit: process.env.NODE_ENV === "development" ? 5 : undefined,
+    limit,
   })
 
   const ezj = new EasyJet()
@@ -25,7 +26,7 @@ export const getRankedFlights = cache(async (airport: string, date: Date) => {
     PreferredOriginIatas: airport,
     StartDate: dayjs(date).format("YYYY-MM-DD"),
     EndDate: dayjs(date).format("YYYY-MM-DD"),
-    MaxResults: process.env.NODE_ENV === "development" ? 5 : 1000,
+    MaxResults: limit,
   })
 
   const flights = (
