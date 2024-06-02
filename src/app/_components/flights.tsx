@@ -95,9 +95,19 @@ export function Flights({
       </div>
 
       {above20.length !== 0 && (
-        <button className="border border-red-500 p-3" onClick={randomFlights}>
-          Take me anywhere
-        </button>
+        <div className="group relative w-full cursor-pointer">
+          <div className="absolute z-0 h-full w-full opacity-0 transition duration-100 group-hover:bg-[url('/background.jpeg')] group-hover:opacity-5"></div>
+
+          <button
+            className="w-full rounded-lg border border-red-500 p-3 group-hover:border-white"
+            onClick={randomFlights}
+          >
+            <span className="inline-block duration-100 group-hover:rotate-90">
+              🎲
+            </span>
+            &nbsp;Take me anywhere
+          </button>
+        </div>
       )}
 
       {flights.length === 0 && (
@@ -137,8 +147,10 @@ const FlightDestination: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
   }
 
   return (
-    <div className="flex flex-col gap-6 border border-red-500 p-3">
-      <div className="flex w-full flex-col items-center justify-between gap-2 sm:flex-row">
+    <div className="group relative flex  flex-col gap-6 rounded-lg border border-red-500 hover:border-white">
+      <div className="absolute z-0 h-full w-full opacity-0 transition duration-100 group-hover:bg-[url('/background.jpeg')] group-hover:opacity-5"></div>
+
+      <div className="z-10 flex w-full flex-col items-center justify-between gap-2 p-3 sm:flex-row">
         <div className="flex-1 basis-1/4 text-left">
           {country?.flagUrl && (
             <img
@@ -159,12 +171,12 @@ const FlightDestination: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
           />
         </div>
       </div>
-      <div className="flex justify-center gap-2">
+      <div className="z-10 flex justify-center gap-2">
         {flight.forecast.map((weather, index) => (
           <WeatherItem key={index} weather={weather} />
         ))}
       </div>
-      <p className="text-sm">
+      <p className="z-10 text-sm">
         {dayjs(flight.departureTime).format(
           flight.airline === "easyjet" ? "dddd MMM D" : "HH:mm dddd MMM D",
         )}{" "}
@@ -172,7 +184,7 @@ const FlightDestination: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
         {flight.origin} 🛬 {flight.destination}
       </p>
 
-      <div className="flex gap-x-2">
+      <div className="z-10 flex gap-x-2 p-3">
         <div className="basis-1/3">
           <BookingButton flight={flight} />
         </div>
@@ -201,7 +213,7 @@ const GetFlightLink: React.FC<{ flight: RankedFlight }> = ({
 }) => {
   return (
     <a href={flight.bookingUrl} target="_blank">
-      <div className="border bg-green-800 py-3 text-center hover:bg-green-600">
+      <div className="rounded-lg border bg-green-800 py-3 text-center hover:bg-green-600">
         🛩️ <strong>Buy Now</strong> for {flight.price} {flight.currency}
       </div>
     </a>
@@ -226,7 +238,7 @@ const BookingButton: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
 
   return (
     <a href={href} target="_blank">
-      <div className="border bg-blue-800 py-3 text-center hover:bg-blue-600">
+      <div className="rounded-lg border bg-blue-800 py-3 text-center hover:bg-blue-600">
         🛌 Find a Stay
       </div>
     </a>
