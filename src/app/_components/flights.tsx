@@ -160,9 +160,14 @@ const FlightDestination: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
             />
           )}
         </div>
-        <h2 className="w-full basis-1/2 self-start text-center text-xl">
-          {flight.destinationFull}: {Math.round(flight.avgTemp * 10) / 10}°C
-        </h2>
+        <div className="flex w-full items-center items-center justify-center gap-2">
+          <h2 className=" text-center text-2xl font-bold">
+            {flight.destinationFull}
+          </h2>
+          <h2 className="self-end text-center text-lg">
+            {Math.round(flight.avgTemp * 10) / 10}°C
+          </h2>
+        </div>
         <div className="flex basis-1/4 items-center justify-end text-right">
           <img
             src={`/${flight.airline}.svg`}
@@ -202,7 +207,7 @@ const WeatherItem: React.FC<{ weather: WeatherData }> = ({ weather }) => {
       <p>
         {weather.time.getDate()}/{weather.time.getMonth() + 1}
       </p>
-      <img src={weather.icon} alt="weather icon" height={30} width={30} />
+      <img src={weather.icon} alt="weather icon" height={48} width={48} />
       <p>{Math.round(weather.temp * 10) / 10}&deg;C</p>
     </div>
   )
