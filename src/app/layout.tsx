@@ -29,7 +29,13 @@ export default function RootLayout({
       <body className={`font-sans ${inter.variable}`}>
         <Providers>
           <TRPCReactProvider>
-            <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#c58055] to-[#300011] text-white">
+            <main
+              className="flex min-h-screen flex-col items-center justify-center 
+           
+            "
+            >
+              {" "}
+              {/* bg-gradient-to-b from-[#c58055] to-[#300011] text-white  */}
               <div className="container flex flex-col items-center justify-center gap-2 px-2 py-16 text-center">
                 <h1 className="py-4 text-5xl font-extrabold tracking-tight sm:text-[5rem]">
                   Hot
