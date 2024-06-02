@@ -102,7 +102,7 @@ export async function getDailyForecast(
   }
 
   const forecast: WeatherData[] = dailyForecast?.list
-    .map((part) => {
+    ?.map((part) => {
       const {
         feels_like,
         temp,
@@ -125,7 +125,7 @@ export async function getDailyForecast(
     .slice(0, 5)
 
   const avgTemp =
-    forecast.reduce((acc, curr) => acc + curr.temp, 0) / forecast.length
+    forecast?.reduce((acc, curr) => acc + curr.temp, 0) / forecast?.length
 
   return {
     avgTemp,
