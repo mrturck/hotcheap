@@ -150,7 +150,7 @@ const FlightDestination: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
     <div className="border-1 group relative  flex flex-col gap-6 rounded-lg border shadow shadow hover:shadow-xl">
       <div className="absolute z-0 h-full w-full opacity-0 transition duration-100 group-hover:bg-[url('/background.jpeg')] group-hover:opacity-5"></div>
 
-      <div className="z-10 flex w-full flex-col items-center justify-between gap-2 p-3 sm:flex-row">
+      <div className="z-10 flex w-full flex-col items-center justify-between gap-2 px-3 py-3 sm:flex-row sm:px-6">
         <div className="flex basis-1/4 items-center gap-2 text-left">
           {country?.flagUrl && (
             <img
@@ -193,11 +193,11 @@ const FlightDestination: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
         {flight.origin} 🛬 {flight.destination}
       </p>
 
-      <div className="z-10 flex gap-x-2 p-3">
-        <div className="basis-1/3">
+      <div className="z-10 flex flex w-full gap-x-2 px-3 py-3 sm:px-6">
+        <div className="basis-1/3 sm:basis-1/2">
           <BookingButton flight={flight} />
         </div>
-        <div className="basis-2/3">
+        <div className="basis-2/3 sm:basis-1/2">
           <GetFlightLink flight={flight} />
         </div>
       </div>
