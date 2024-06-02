@@ -99,10 +99,10 @@ export function Flights({
           <div className="absolute z-0 h-full w-full opacity-0 transition duration-100 group-hover:bg-[url('/background.jpeg')] group-hover:opacity-5"></div>
 
           <button
-            className="w-full rounded-lg border p-3 shadow hover:shadow-xl"
+            className="flex  w-full justify-center gap-2 rounded-lg border p-3 font-medium text-gray-600 shadow hover:shadow-xl"
             onClick={randomFlights}
           >
-            <span className="inline-block font-semibold duration-100 group-hover:rotate-90">
+            <span className="inline-block duration-300 group-hover:rotate-180">
               🎲
             </span>
             &nbsp;Take me anywhere

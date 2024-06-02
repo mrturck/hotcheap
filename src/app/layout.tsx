@@ -43,7 +43,10 @@ export default function RootLayout({
                   Cheap
                 </h1>
                 <p className="">
-                  Ryanair and EasyJet flights ranked by Summer Magic™️
+                  Ryanair and EasyJet flights ranked by
+                  <span className="bg-gradient-to-r from-red-500 via-yellow-500 to-purple-500 bg-clip-text font-medium text-transparent">
+                    &nbsp;Summer Magic™️
+                  </span>
                 </p>
                 <div className="text-xs font-light">
                   Made by{" "}
