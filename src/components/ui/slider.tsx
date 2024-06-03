@@ -21,7 +21,7 @@ const Slider = React.forwardRef<
       <SliderPrimitive.Range className="absolute h-full bg-white" />
     </SliderPrimitive.Track>
     <SliderPrimitive.Thumb className=" -mt-3 block h-6 w-7 rounded-full text-3xl transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
-      😎
+      {props?.value == 0.5 ? "😎" : props?.value < 0.5 ? "🤑" : "🥵"}
     </SliderPrimitive.Thumb>
   </SliderPrimitive.Root>
 ))
