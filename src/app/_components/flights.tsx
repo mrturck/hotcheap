@@ -99,10 +99,10 @@ export function Flights({
           <div className="absolute z-0 h-full w-full opacity-0 transition duration-100 group-hover:bg-[url('/background.jpeg')] group-hover:opacity-5"></div>
 
           <button
-            className="w-full rounded-lg border border-red-500 p-3 group-hover:border-white"
+            className="flex  w-full justify-center gap-2 rounded-lg border p-3 font-medium text-white shadow hover:shadow-xl"
             onClick={randomFlights}
           >
-            <span className="inline-block duration-100 group-hover:rotate-90">
+            <span className="inline-block duration-300 group-hover:rotate-180">
               🎲
             </span>
             &nbsp;Take me anywhere
@@ -147,22 +147,31 @@ const FlightDestination: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
   }
 
   return (
-    <div className="group relative flex  flex-col gap-6 rounded-lg border border-red-500 hover:border-white">
+    <div className="border-1 group relative  flex flex-col gap-6 rounded-lg border shadow shadow hover:shadow-xl">
       <div className="absolute z-0 h-full w-full opacity-0 transition duration-100 group-hover:bg-[url('/background.jpeg')] group-hover:opacity-5"></div>
 
-      <div className="z-10 flex w-full flex-col items-center justify-between gap-2 p-3 sm:flex-row">
-        <div className="flex-1 basis-1/4 text-left">
+      <div className="z-10 flex w-full flex-col items-center justify-between gap-2 px-3 py-3 sm:flex-row sm:px-6">
+        <div className="flex basis-1/4 items-center gap-2 text-left">
           {country?.flagUrl && (
             <img
               src={country.flagUrl}
               alt={`${country.code} flag`}
-              className="inline-block h-6"
+              className=" h-6"
             />
           )}
+          <p className=" text-lg font-semibold text-white">
+            {flight.price}{" "}
+            <span className="text-sm font-normal">{flight.currency}</span>
+          </p>
         </div>
-        <h2 className="w-full basis-1/2 self-start text-center text-xl">
-          {flight.destinationFull}: {Math.round(flight.avgTemp * 10) / 10}°C
-        </h2>
+        <div className="flex flex-1 items-center items-center justify-center gap-2">
+          <h2 className=" text-center text-2xl font-bold">
+            {flight.destinationFull}
+          </h2>
+          <h2 className="self-end text-center text-lg">
+            {Math.round(flight.avgTemp * 10) / 10}°C
+          </h2>
+        </div>
         <div className="flex basis-1/4 items-center justify-end text-right">
           <img
             src={`/${flight.airline}.svg`}
@@ -184,11 +193,11 @@ const FlightDestination: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
         {flight.origin} 🛬 {flight.destination}
       </p>
 
-      <div className="z-10 flex gap-x-2 p-3">
-        <div className="basis-1/3">
+      <div className="z-10 flex flex w-full gap-x-2 px-3 py-3 sm:px-6">
+        <div className="basis-1/3 sm:basis-1/2">
           <BookingButton flight={flight} />
         </div>
-        <div className="basis-2/3">
+        <div className="basis-2/3 sm:basis-1/2">
           <GetFlightLink flight={flight} />
         </div>
       </div>
@@ -202,7 +211,7 @@ const WeatherItem: React.FC<{ weather: WeatherData }> = ({ weather }) => {
       <p>
         {weather.time.getDate()}/{weather.time.getMonth() + 1}
       </p>
-      <img src={weather.icon} alt="weather icon" height={30} width={30} />
+      <img src={weather.icon} alt="weather icon" height={48} width={48} />
       <p>{Math.round(weather.temp * 10) / 10}&deg;C</p>
     </div>
   )
@@ -213,7 +222,7 @@ const GetFlightLink: React.FC<{ flight: RankedFlight }> = ({
 }) => {
   return (
     <a href={flight.bookingUrl} target="_blank">
-      <div className="rounded-lg border bg-green-800 py-3 text-center hover:bg-green-600">
+      <div className="rounded-lg border bg-green-600 py-3 text-center text-white hover:bg-green-500">
         🛩️ <strong>Buy Now</strong> for {flight.price} {flight.currency}
       </div>
     </a>
@@ -238,7 +247,7 @@ const BookingButton: React.FC<{ flight: RankedFlight }> = ({ flight }) => {
 
   return (
     <a href={href} target="_blank">
-      <div className="rounded-lg border bg-blue-800 py-3 text-center hover:bg-blue-600">
+      <div className="rounded-lg border bg-blue-500 py-3 text-center text-white hover:bg-blue-400">
         🛌 Find a Stay
       </div>
     </a>

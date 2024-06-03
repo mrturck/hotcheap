@@ -29,7 +29,7 @@ export default function RootLayout({
       <body className={`font-sans ${inter.variable}`}>
         <Providers>
           <TRPCReactProvider>
-            <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#c58055] to-[#300011] text-white">
+            <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-red-950 to-blue-950 text-white">
               <div className="container flex flex-col items-center justify-center gap-2 px-2 py-16 text-center">
                 <h1 className="py-4 text-5xl font-extrabold tracking-tight sm:text-[5rem]">
                   Hot
@@ -37,7 +37,10 @@ export default function RootLayout({
                   Cheap
                 </h1>
                 <p className="">
-                  Ryanair and EasyJet flights ranked by Summer Magic™️
+                  Ryanair and EasyJet flights ranked by
+                  <span className="bg-gradient-to-r from-red-500 via-yellow-500 to-purple-500 bg-clip-text font-medium text-transparent">
+                    &nbsp;Summer Magic™️
+                  </span>
                 </p>
                 <div className="text-xs font-light">
                   Made by{" "}
